@@ -1,9 +1,9 @@
-const CACHE_NAME = "comprafacil-cache-v1";
+const CACHE_NAME = "comprafacil-pwa-v1";
 const ASSETS = [
   "./",
   "./index.html",
+  "./catalogo.js",
   "./manifest.json",
-  "./sw.js",
   "./icon-192.png",
   "./icon-512.png"
 ];
@@ -27,16 +27,16 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      return (
-        cached ||
-        fetch(event.request)
-          .then((resp) => {
-            const copy = resp.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-            return resp;
-          })
-          .catch(() => caches.match("./index.html"))
-      );
+      if (cached) return cached;
+      return fetch(event.request)
+        .then((res) => {
+          if (event.request.method === "GET" && res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match("./"));
     })
   );
 });
