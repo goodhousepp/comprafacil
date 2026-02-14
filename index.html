@@ -9,17 +9,17 @@
 :root{
   --bg1:#0d1b2a;
   --bg2:#16283f;
-  --card:#1b3350;
   --text:#ffffff;
   --muted:#cbd5e1;
   --primary:#2563eb;
   --danger:#ef4444;
   --ok:#22c55e;
   --radius:14px;
+  --card:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.10);
 }
 
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -32,12 +32,15 @@ body{
   max-width:720px;
   margin:auto;
   padding:16px;
-  padding-bottom:220px;
+  padding-bottom:260px;
 }
 
 h1{
   margin:0 0 12px;
   font-size:22px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 button, input, select{
@@ -49,18 +52,22 @@ button, input, select{
 }
 
 input, select{
-  background:rgba(255,255,255,.08);
+  background:var(--card);
   color:white;
+  border:1px solid var(--line);
 }
 
 button{
   cursor:pointer;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:white;
 }
 
 .addBtn{
-  background:var(--primary);
-  color:white;
-  font-weight:bold;
+  background:linear-gradient(180deg,#2b6fff,#1f56d7);
+  border:none;
+  font-weight:800;
 }
 
 .filters{
@@ -68,91 +75,114 @@ button{
   gap:8px;
   margin-bottom:12px;
 }
-
-.filters button{
-  flex:1;
-  background:rgba(255,255,255,.08);
-  color:white;
-}
-
+.filters button{flex:1}
 .filters .active{
-  background:var(--primary);
+  background:rgba(37,99,235,.35);
+  border-color:rgba(37,99,235,.55);
 }
 
-.list{
+.topRow{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.hint{
+  color:var(--muted);
+  font-size:13px;
+  margin:6px 0 10px;
+}
+
+.section{
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.10);
+  border-radius:16px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.sectionHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 12px;
+  background:rgba(255,255,255,.04);
+  border-bottom:1px solid var(--line);
+}
+
+.sectionTitle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+}
+
+.badge{
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+.sectionHeader button{
+  width:auto;
+  padding:8px 10px;
+  font-size:13px;
+  border-radius:12px;
+}
+
+.items{
   display:flex;
   flex-direction:column;
   gap:10px;
-  margin-top:12px;
+  padding:12px;
 }
 
 .item{
-  background:var(--card);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
   padding:12px;
-  border-radius:var(--radius);
+  border-radius:14px;
   display:flex;
   align-items:center;
   gap:10px;
 }
-
-.item input[type=checkbox]{
-  width:22px;
-  height:22px;
-}
-
-.name{
-  flex:1;
-  font-size:17px;
-  word-break:break-word;
-}
-
-.done .name{
-  text-decoration:line-through;
-  opacity:.6;
-}
+.item input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok)}
+.name{flex:1;font-size:17px;word-break:break-word}
+.done .name{text-decoration:line-through;opacity:.6}
 
 .tag{
   font-size:12px;
-  background:rgba(37,99,235,.3);
   padding:4px 8px;
   border-radius:10px;
+  border:1px solid var(--line);
+  white-space:nowrap;
 }
 
-.qtyBtn{
-  background:rgba(37,99,235,.2);
-  color:white;
-}
+.qtyBtn{background:rgba(37,99,235,.18);border-color:rgba(37,99,235,.30)}
+.delBtn{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.30)}
 
-.delBtn{
-  background:rgba(239,68,68,.3);
-  color:white;
-}
-
-/* BARRA INFERIOR 100% RESPONSIVA */
 .bottomBar{
   position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:rgba(19,37,58,.95);
+  bottom:0; left:0; right:0;
+  background:rgba(13,27,42,.92);
+  backdrop-filter: blur(10px);
+  border-top:1px solid var(--line);
   padding:14px;
 }
 
-/* Layout corrigido para mobile */
 .gridInput{
   display:grid;
-  grid-template-columns:1fr 80px;
+  grid-template-columns:1fr 90px;
   gap:10px;
 }
-
-.gridInput select{
-  grid-column:1 / -1;
-}
-
-.gridInput .addBtn{
-  grid-column:1 / -1;
-  margin-top:6px;
-}
+.gridInput select{grid-column:1/-1}
+.gridInput .addBtn{grid-column:1/-1}
 
 .actions{
   display:flex;
@@ -160,213 +190,328 @@ button{
   flex-wrap:wrap;
   margin-top:10px;
 }
-
-.actions button{
-  flex:1;
-  background:rgba(255,255,255,.08);
-  color:white;
-  font-size:14px;
+.actions button{flex:1;font-size:14px;padding:10px}
+.actions .danger{
+  background:rgba(239,68,68,.20);
+  border-color:rgba(239,68,68,.30);
 }
 
-.actions .danger{
-  background:rgba(239,68,68,.3);
+.empty{
+  margin-top:14px;
+  color:var(--muted);
+  opacity:.9;
+}
+
+/* Cores por categoria */
+.c-Hortifruti{ --c:#22c55e; }
+.c-PadariaMatinais{ --c:#f59e0b; }
+.c-Carnes{ --c:#ef4444; }
+.c-Laticinios{ --c:#60a5fa; }
+.c-Mercearia{ --c:#a78bfa; }
+.c-Bebidas{ --c:#38bdf8; }
+.c-Limpeza{ --c:#34d399; }
+.c-Higiene{ --c:#fb7185; }
+.c-Outros{ --c:#cbd5e1; }
+
+.sectionHeader{
+  border-left:6px solid var(--c, #94a3b8);
+}
+.tag{
+  background: color-mix(in srgb, var(--c, #94a3b8) 20%, transparent);
+  border-color: color-mix(in srgb, var(--c, #94a3b8) 35%, transparent);
 }
 </style>
 </head>
 
 <body>
-
 <div class="wrap">
-<h1>🛒 CompraFácil</h1>
+  <h1>🛒 CompraFácil</h1>
 
-<div class="filters">
-<button id="fAll" class="active">Todos</button>
-<button id="fTodo">Pendentes</button>
-<button id="fDone">Comprados</button>
-</div>
+  <div class="filters">
+    <button id="fAll" class="active">Todos</button>
+    <button id="fTodo">Pendentes</button>
+    <button id="fDone">Comprados</button>
+  </div>
 
-<select id="filterCategory">
-<option value="all">Todas categorias</option>
-<option>Hortifruti</option>
-<option>Padaria/Matinais</option>
-<option>Carnes</option>
-<option>Laticínios</option>
-<option>Mercearia</option>
-<option>Bebidas</option>
-<option>Limpeza</option>
-<option>Higiene</option>
-<option>Outros</option>
-</select>
+  <div class="topRow">
+    <select id="filterCategory">
+      <option value="all">Todas categorias</option>
+      <option>Hortifruti</option>
+      <option>Padaria/Matinais</option>
+      <option>Carnes</option>
+      <option>Laticínios</option>
+      <option>Mercearia</option>
+      <option>Bebidas</option>
+      <option>Limpeza</option>
+      <option>Higiene</option>
+      <option>Outros</option>
+    </select>
 
-<div class="list" id="list"></div>
+    <button id="toggleAll">Recolher/Expandir categorias</button>
+  </div>
+
+  <div class="hint">Toque na quantidade para editar. Itens iguais pendentes somam a quantidade.</div>
+
+  <div id="sections"></div>
+  <div class="empty" id="empty" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
 </div>
 
 <div class="bottomBar">
-<div class="gridInput">
-<input id="product" placeholder="Produto (ex: leite)">
-<input id="qty" placeholder="Qtd">
-<select id="category">
-<option>Hortifruti</option>
-<option>Padaria/Matinais</option>
-<option>Carnes</option>
-<option>Laticínios</option>
-<option>Mercearia</option>
-<option>Bebidas</option>
-<option>Limpeza</option>
-<option>Higiene</option>
-<option>Outros</option>
-</select>
-<button class="addBtn" id="addBtn">Adicionar</button>
-</div>
+  <div class="gridInput">
+    <input id="product" placeholder="Produto (ex: leite)">
+    <input id="qty" placeholder="Qtd" inputmode="numeric">
+    <select id="category">
+      <option>Hortifruti</option>
+      <option>Padaria/Matinais</option>
+      <option>Carnes</option>
+      <option>Laticínios</option>
+      <option>Mercearia</option>
+      <option>Bebidas</option>
+      <option>Limpeza</option>
+      <option>Higiene</option>
+      <option>Outros</option>
+    </select>
+    <button class="addBtn" id="addBtn">Adicionar</button>
+  </div>
 
-<div class="actions">
-<button id="clearDone">Remover comprados</button>
-<button id="sortAZ">Ordenar A–Z</button>
-<button id="sortStore">Ordem de inclusão</button>
-<button id="clearAll" class="danger">Limpar tudo</button>
-</div>
+  <div class="actions">
+    <button id="clearDone">Remover comprados</button>
+    <button id="sortAZ">Ordenar A–Z</button>
+    <button id="sortStore">Ordem de inclusão</button>
+    <button id="clearAll" class="danger">Limpar tudo</button>
+  </div>
 </div>
 
 <script>
-const STORAGE="comprafacil_v4";
+const STORAGE="comprafacil_v5";
+const UIKEY="comprafacil_ui_v5";
+
+const CATS=[
+  "Hortifruti",
+  "Padaria/Matinais",
+  "Carnes",
+  "Laticínios",
+  "Mercearia",
+  "Bebidas",
+  "Limpeza",
+  "Higiene",
+  "Outros"
+];
+
+const ICON={
+  "Hortifruti":"🥦",
+  "Padaria/Matinais":"🥐",
+  "Carnes":"🥩",
+  "Laticínios":"🧀",
+  "Mercearia":"🧂",
+  "Bebidas":"🥤",
+  "Limpeza":"🧼",
+  "Higiene":"🪥",
+  "Outros":"📦"
+};
+
+function clsFor(cat){
+  return "c-" + cat
+    .replaceAll("í","i")
+    .replaceAll("ã","a")
+    .replaceAll("/","")
+    .replaceAll(" ","");
+}
+
 let items=JSON.parse(localStorage.getItem(STORAGE))||[];
-let filter="all";
-let order="store";
+let ui=JSON.parse(localStorage.getItem(UIKEY))||{collapsed:{}, allCollapsed:false};
+
+let filter="all";   // all | todo | done
+let order="store";  // store | az
 let catFilter="all";
 
-function save(){localStorage.setItem(STORAGE,JSON.stringify(items));}
+const $ = (id)=>document.getElementById(id);
+
+function save(){
+  localStorage.setItem(STORAGE,JSON.stringify(items));
+}
+function saveUI(){
+  localStorage.setItem(UIKEY,JSON.stringify(ui));
+}
+
+function setActive(btnId){
+  document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
+  $(btnId).classList.add("active");
+}
+
+function getView(){
+  let view=[...items];
+
+  if(filter==="todo") view=view.filter(i=>!i.done);
+  if(filter==="done") view=view.filter(i=>i.done);
+  if(catFilter!=="all") view=view.filter(i=>i.category===catFilter);
+
+  if(order==="az"){
+    view.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+  }else{
+    view.sort((a,b)=>b.createdAt-a.createdAt);
+  }
+  return view;
+}
+
+function groupByCategory(view){
+  const map=new Map(CATS.map(c=>[c,[]]));
+  for(const it of view){
+    if(!map.has(it.category)) map.set(it.category,[]);
+    map.get(it.category).push(it);
+  }
+  return map;
+}
 
 function render(){
-let view=[...items];
+  const sectionsEl=$("sections");
+  const emptyEl=$("empty");
+  const view=getView();
+  const grouped=groupByCategory(view);
 
-if(filter==="todo") view=view.filter(i=>!i.done);
-if(filter==="done") view=view.filter(i=>i.done);
-if(catFilter!=="all") view=view.filter(i=>i.category===catFilter);
+  sectionsEl.innerHTML="";
+  emptyEl.style.display = view.length ? "none" : "block";
 
-if(order==="az"){
-view.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
-}else{
-view.sort((a,b)=>b.createdAt-a.createdAt);
+  for(const cat of CATS){
+    const arr=grouped.get(cat) || [];
+    if(arr.length===0) continue;
+
+    const section=document.createElement("div");
+    section.className="section " + clsFor(cat);
+
+    const header=document.createElement("div");
+    header.className="sectionHeader";
+
+    const title=document.createElement("div");
+    title.className="sectionTitle";
+    title.textContent = `${ICON[cat]||"🛒"} ${cat}`;
+
+    const badge=document.createElement("div");
+    const pending=arr.filter(x=>!x.done).length;
+    const done=arr.length-pending;
+    badge.className="badge";
+    badge.textContent = `${pending} pend • ${done} comp`;
+
+    const toggle=document.createElement("button");
+    const isCollapsed = !!ui.collapsed[cat];
+    toggle.textContent = isCollapsed ? "Expandir" : "Recolher";
+    toggle.onclick=()=>{
+      ui.collapsed[cat]=!ui.collapsed[cat];
+      saveUI();
+      render();
+    };
+
+    header.append(title,badge,toggle);
+
+    const itemsBox=document.createElement("div");
+    itemsBox.className="items";
+    if(isCollapsed) itemsBox.style.display="none";
+
+    for(const item of arr){
+      const row=document.createElement("div");
+      row.className="item" + (item.done?" done":"");
+
+      const check=document.createElement("input");
+      check.type="checkbox";
+      check.checked=item.done;
+      check.onchange=()=>{
+        item.done=check.checked;
+        save(); render();
+      };
+
+      const name=document.createElement("div");
+      name.className="name";
+      name.textContent=item.name;
+
+      const tag=document.createElement("div");
+      tag.className="tag";
+      tag.textContent=item.qty;
+
+      const qtyBtn=document.createElement("button");
+      qtyBtn.className="qtyBtn";
+      qtyBtn.textContent="Qtd";
+      qtyBtn.onclick=()=>{
+        const v=prompt("Quantidade:", item.qty||"1");
+        if(v===null) return;
+        item.qty=(v||"1").trim()||"1";
+        save(); render();
+      };
+
+      const delBtn=document.createElement("button");
+      delBtn.className="delBtn";
+      delBtn.textContent="Excluir";
+      delBtn.onclick=()=>{
+        items=items.filter(i=>i!==item);
+        save(); render();
+      };
+
+      row.append(check,name,tag,qtyBtn,delBtn);
+      itemsBox.appendChild(row);
+    }
+
+    section.append(header,itemsBox);
+    sectionsEl.appendChild(section);
+  }
 }
 
-const list=document.getElementById("list");
-list.innerHTML="";
+$("addBtn").onclick=()=>{
+  const name=($("product").value||"").trim();
+  const qty=($("qty").value||"").trim() || "1";
+  const category=$("category").value;
 
-view.forEach(item=>{
-const row=document.createElement("div");
-row.className="item"+(item.done?" done":"");
+  if(!name) return;
 
-const check=document.createElement("input");
-check.type="checkbox";
-check.checked=item.done;
-check.onchange=()=>{
-item.done=check.checked;
-save();
-render();
+  // soma se já existir pendente igual na mesma categoria
+  const found = items.find(i =>
+    !i.done &&
+    i.category===category &&
+    i.name.toLowerCase()===name.toLowerCase()
+  );
+  if(found){
+    const a=parseInt(found.qty,10);
+    const b=parseInt(qty,10);
+    if(!isNaN(a) && !isNaN(b)) found.qty=String(a+b);
+    else found.qty=qty;
+  }else{
+    items.unshift({name,qty,category,done:false,createdAt:Date.now()});
+  }
+
+  save();
+  $("product").value="";
+  $("qty").value="";
+  $("product").focus();
+  render();
 };
 
-const name=document.createElement("div");
-name.className="name";
-name.textContent=item.name;
+$("fAll").onclick=()=>{filter="all"; setActive("fAll"); render();};
+$("fTodo").onclick=()=>{filter="todo"; setActive("fTodo"); render();};
+$("fDone").onclick=()=>{filter="done"; setActive("fDone"); render();};
 
-const tag=document.createElement("div");
-tag.className="tag";
-tag.textContent=item.category;
+$("filterCategory").onchange=(e)=>{catFilter=e.target.value; render();};
 
-const qty=document.createElement("button");
-qty.className="qtyBtn";
-qty.textContent=item.qty;
-qty.onclick=()=>{
-const val=prompt("Quantidade:",item.qty);
-if(val!==null){
-item.qty=val||"1";
-save();
-render();
-}
+$("clearDone").onclick=()=>{
+  items=items.filter(i=>!i.done);
+  save(); render();
 };
 
-const del=document.createElement("button");
-del.className="delBtn";
-del.textContent="X";
-del.onclick=()=>{
-items=items.filter(i=>i!==item);
-save();
-render();
+$("clearAll").onclick=()=>{
+  if(confirm("Apagar tudo?")){
+    items=[];
+    save(); render();
+  }
 };
 
-row.append(check,name,tag,qty,del);
-list.appendChild(row);
-});
-}
+$("sortAZ").onclick=()=>{order="az"; render();};
+$("sortStore").onclick=()=>{order="store"; render();};
 
-document.getElementById("addBtn").onclick=()=>{
-const name=document.getElementById("product").value.trim();
-const qty=document.getElementById("qty").value.trim()||"1";
-const category=document.getElementById("category").value;
-if(!name)return;
-
-items.unshift({
-name,qty,category,done:false,createdAt:Date.now()
-});
-save();
-render();
-document.getElementById("product").value="";
-document.getElementById("qty").value="";
-};
-
-document.getElementById("fAll").onclick=()=>{
-filter="all";
-setActive("fAll");
-render();
-};
-document.getElementById("fTodo").onclick=()=>{
-filter="todo";
-setActive("fTodo");
-render();
-};
-document.getElementById("fDone").onclick=()=>{
-filter="done";
-setActive("fDone");
-render();
-};
-
-function setActive(id){
-document.querySelectorAll(".filters button")
-.forEach(b=>b.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
-
-document.getElementById("filterCategory").onchange=e=>{
-catFilter=e.target.value;
-render();
-};
-
-document.getElementById("clearDone").onclick=()=>{
-items=items.filter(i=>!i.done);
-save();
-render();
-};
-
-document.getElementById("clearAll").onclick=()=>{
-if(confirm("Apagar tudo?")){
-items=[];
-save();
-render();
-}
-};
-
-document.getElementById("sortAZ").onclick=()=>{
-order="az";
-render();
-};
-
-document.getElementById("sortStore").onclick=()=>{
-order="store";
-render();
+$("toggleAll").onclick=()=>{
+  ui.allCollapsed=!ui.allCollapsed;
+  for(const c of CATS) ui.collapsed[c]=ui.allCollapsed;
+  saveUI();
+  render();
 };
 
 render();
 </script>
-
 </body>
 </html>
