@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CompraFácil</title>
 
 <style>
@@ -14,1338 +14,291 @@
   --primary:#2563eb;
   --danger:#ef4444;
   --ok:#22c55e;
-  --radius:16px;
+  --radius:14px;
   --card:rgba(255,255,255,.06);
-  --line:rgba(255,255,255,.10);
+  --line:rgba(255,255,255,.12);
 }
-
-*{ box-sizing:border-box; }
+*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:system-ui;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
   color:var(--text);
-  overflow-x:hidden;
 }
-
 .wrap{
   max-width:760px;
   margin:auto;
   padding:16px;
-  padding-bottom:410px;
+  padding-bottom:300px;
 }
-
 h1{
   margin:0 0 12px;
   font-size:22px;
-  display:flex;
-  align-items:center;
-  gap:10px;
 }
-
-button, input, select, textarea{
+button,input,select{
   font-size:16px;
   border-radius:var(--radius);
   padding:12px;
   border:none;
   width:100%;
 }
-
-input, select, textarea{
+input,select{
   background:var(--card);
   color:white;
   border:1px solid var(--line);
 }
-
 button{
-  cursor:pointer;
-  border:1px solid var(--line);
   background:var(--card);
   color:white;
+  border:1px solid var(--line);
 }
-button:active{ transform:scale(.99); }
-
+button:active{transform:scale(.98)}
 .addBtn{
-  background:linear-gradient(180deg,#2b6fff,#1f56d7);
+  background:var(--primary);
   border:none;
-  font-weight:800;
+  font-weight:bold;
 }
-
 .filters{
   display:flex;
   gap:8px;
   margin-bottom:12px;
 }
-.filters button{ flex:1; }
+.filters button{flex:1}
 .filters .active{
-  background:rgba(37,99,235,.35);
-  border-color:rgba(37,99,235,.55);
+  background:rgba(37,99,235,.4);
 }
-
-.topRow{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.hint{
-  color:var(--muted);
-  font-size:13px;
-  margin:6px 0 10px;
-}
-
-/* Favoritos/Recentes */
-.suggestBox{
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.10);
-  border-radius:16px;
-  padding:12px;
-  margin:10px 0;
-}
-.suggestTitle{
-  font-weight:800;
-  margin-bottom:8px;
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  align-items:center;
-}
-.smallBtn{
-  width:auto;
-  padding:8px 10px;
-  font-size:13px;
-  border-radius:12px;
-}
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.chip{
-  width:auto;
-  padding:10px 12px;
-  border-radius:999px;
-  font-size:14px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  white-space:nowrap;
-}
-
-/* Seções por categoria */
 .section{
   border:1px solid var(--line);
-  background:rgba(0,0,0,.10);
-  border-radius:16px;
-  overflow:hidden;
+  border-radius:14px;
   margin-top:10px;
+  overflow:hidden;
 }
-
 .sectionHeader{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:12px 12px;
-  background:rgba(255,255,255,.04);
-  border-bottom:1px solid var(--line);
-  border-left:6px solid var(--c, #94a3b8);
-}
-
-.sectionTitle{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:800;
-}
-
-.badge{
-  font-size:12px;
-  padding:4px 10px;
-  border-radius:999px;
-  border:1px solid var(--line);
+  padding:10px;
+  font-weight:bold;
   background:rgba(255,255,255,.05);
-  color:var(--muted);
-  white-space:nowrap;
 }
-
-.sectionHeader button{
-  width:auto;
-  padding:8px 10px;
-  font-size:13px;
-  border-radius:12px;
-}
-
 .items{
+  padding:10px;
   display:flex;
   flex-direction:column;
-  gap:10px;
-  padding:12px;
+  gap:8px;
 }
-
 .item{
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  padding:12px;
-  border-radius:14px;
   display:flex;
   align-items:center;
-  gap:10px;
-}
-.item input[type=checkbox]{
-  width:22px;height:22px;
-  accent-color:var(--ok);
-}
-
-/* NÃO quebrar letra por letra */
-.name{
-  flex:1;
-  font-size:17px;
-  white-space:normal;
-  word-break:normal;
-  overflow-wrap:break-word;
-}
-
-.done .name{ text-decoration:line-through; opacity:.6; }
-
-.tag{
-  font-size:12px;
-  padding:4px 8px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  white-space:nowrap;
-  background: color-mix(in srgb, var(--c, #94a3b8) 20%, transparent);
-  border-color: color-mix(in srgb, var(--c, #94a3b8) 35%, transparent);
-}
-
-.qtyBtn{ background:rgba(37,99,235,.18); border-color:rgba(37,99,235,.30); }
-.delBtn{ background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.30); }
-
-.favBtn{
-  width:auto;
-  padding:10px 10px;
-  font-size:14px;
-  border-radius:12px;
+  gap:8px;
   background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
+  padding:8px;
+  border-radius:10px;
 }
-.favOn{
-  background:rgba(245,158,11,.20);
-  border-color:rgba(245,158,11,.35);
-}
-
-/* Barra inferior */
+.name{flex:1}
+.done .name{text-decoration:line-through;opacity:.6}
 .bottomBar{
   position:fixed;
-  bottom:0; left:0; right:0;
-  background:rgba(13,27,42,.92);
-  backdrop-filter: blur(10px);
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(13,27,42,.95);
+  padding:12px;
   border-top:1px solid var(--line);
-  padding:14px;
 }
-
 .gridInput{
   display:grid;
-  grid-template-columns:1fr 90px;
-  gap:10px;
-}
-.gridInput select{ grid-column:1/-1; }
-.gridInput .addBtn{ grid-column:1/-1; }
-
-/* Atalhos de quantidade */
-.qtyRow{
-  display:flex;
+  grid-template-columns:1fr 80px;
   gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
 }
-.qtyRow button{
-  width:auto;
-  padding:10px 12px;
-  border-radius:999px;
-  font-size:14px;
-}
-
-.actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.actions button{ flex:1; font-size:14px; padding:10px; }
-.actions .danger{
-  background:rgba(239,68,68,.20);
-  border-color:rgba(239,68,68,.30);
-}
-
-.empty{
-  margin-top:14px;
-  color:var(--muted);
-  opacity:.9;
-}
-
-/* Modal compartilhar */
-.modal{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-.modalCard{
-  width:min(760px, 100%);
-  background:rgba(13,27,42,.98);
+.gridInput select{grid-column:1/-1}
+.gridInput button{grid-column:1/-1}
+.acWrap{position:relative}
+.acList{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:#0d1b2a;
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
+  border-radius:10px;
+  max-height:240px;
+  overflow:auto;
+  display:none;
+  z-index:20;
 }
-.modalTop{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  margin-bottom:10px;
+.acItem{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
-.modalTop strong{ font-size:16px; }
-.modalGrid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:10px;
-}
-.qrWrap{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:flex-start;
-}
-canvas{ border-radius:12px; background:white; padding:8px; }
-
-/* Cores por categoria */
-.c-Hortifruti{ --c:#22c55e; }
-.c-PadariaMatinais{ --c:#f59e0b; }
-.c-Carnes{ --c:#ef4444; }
-.c-Laticinios{ --c:#60a5fa; }
-.c-Mercearia{ --c:#a78bfa; }
-.c-Bebidas{ --c:#38bdf8; }
-.c-Limpeza{ --c:#34d399; }
-.c-Higiene{ --c:#fb7185; }
-.c-Outros{ --c:#cbd5e1; }
+.acItem:last-child{border-bottom:none}
+.acItem:hover{background:rgba(255,255,255,.06)}
 </style>
 </head>
 
 <body>
 <div class="wrap">
-  <h1>🛒 CompraFácil</h1>
+<h1>🛒 CompraFácil</h1>
 
-  <div class="filters">
-    <button id="fAll" class="active">Todos</button>
-    <button id="fTodo">Pendentes</button>
-    <button id="fDone">Comprados</button>
-  </div>
+<div class="filters">
+<button id="fAll" class="active">Todos</button>
+<button id="fTodo">Pendentes</button>
+<button id="fDone">Comprados</button>
+</div>
 
-  <!-- (1) BUSCA NA LISTA ATUAL -->
-  <input id="searchList" placeholder="Buscar na lista (ex: leite, alho, sabão)">
+<input id="searchList" placeholder="Buscar na lista">
 
-  <div class="topRow" style="margin-top:10px;">
-    <select id="filterCategory">
-      <option value="all">Todas categorias</option>
-      <option>Hortifruti</option>
-      <option>Padaria/Matinais</option>
-      <option>Carnes</option>
-      <option>Laticínios</option>
-      <option>Mercearia</option>
-      <option>Bebidas</option>
-      <option>Limpeza</option>
-      <option>Higiene</option>
-      <option>Outros</option>
-    </select>
-
-    <button id="toggleAll">Recolher/Expandir categorias</button>
-  </div>
-
-  <div class="hint">Digite no Produto (abaixo) para abrir o dropdown. Use Buscar para achar itens já adicionados.</div>
-
-  <div class="suggestBox">
-    <div class="suggestTitle">
-      <div>Favoritos</div>
-      <button class="smallBtn" id="clearFav">Limpar</button>
-    </div>
-    <div class="chips" id="favChips"></div>
-  </div>
-
-  <div class="suggestBox">
-    <div class="suggestTitle">
-      <div>Recentes</div>
-      <button class="smallBtn" id="clearRecents">Limpar</button>
-    </div>
-    <div class="chips" id="recentChips"></div>
-  </div>
-
-  <div id="sections"></div>
-  <div class="empty" id="empty" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
+<div id="sections"></div>
 </div>
 
 <div class="bottomBar">
-  <div class="gridInput">
-    <input id="product" placeholder="Produto (digite para buscar)" list="allItems" autocomplete="off">
-    <datalist id="allItems">
-      <!-- (2) Dropdown com centenas -->
-      <option value="Abacate"></option><option value="Abacaxi"></option><option value="Abóbora"></option><option value="Acelga"></option>
-      <option value="Acerola"></option><option value="Açúcar"></option><option value="Açúcar mascavo"></option><option value="Adoçante"></option>
-      <option value="Agrião"></option><option value="Alface"></option><option value="Alho"></option><option value="Alho poró"></option>
-      <option value="Amaciante"></option><option value="Amendoim"></option><option value="Amido de milho"></option><option value="Arroz"></option>
-      <option value="Atum enlatado"></option><option value="Aveia em flocos"></option><option value="Azeitona"></option><option value="Água mineral"></option>
-      <option value="Água com gás"></option><option value="Água de coco"></option><option value="Bacon"></option><option value="Banana"></option>
-      <option value="Batata inglesa"></option><option value="Batata doce"></option><option value="Batata palha"></option><option value="Berinjela"></option>
-      <option value="Beterraba"></option><option value="Biscoito água e sal"></option><option value="Biscoito maizena"></option><option value="Biscoito integral"></option>
-      <option value="Bolo"></option><option value="Brócolis"></option><option value="Café em pó"></option><option value="Café solúvel"></option>
-      <option value="Caldo de carne"></option><option value="Caldo de galinha"></option><option value="Canela em pó"></option><option value="Carne bovina"></option>
-      <option value="Carne moída"></option><option value="Carne suína"></option><option value="Carvão"></option><option value="Cebola"></option>
-      <option value="Cebolinha"></option><option value="Cenoura"></option><option value="Cereal matinal"></option><option value="Chá"></option>
-      <option value="Chocolate"></option><option value="Chuchu"></option><option value="Coentro"></option><option value="Condicionador"></option>
-      <option value="Couve"></option><option value="Couve-flor"></option><option value="Creme de leite"></option><option value="Creme dental"></option>
-      <option value="Desinfetante"></option><option value="Desodorante"></option><option value="Detergente"></option><option value="Doce de leite"></option>
-      <option value="Ervilha"></option><option value="Escova de dente"></option><option value="Esponja de louça"></option><option value="Extrato de tomate"></option>
-      <option value="Farinha de trigo"></option><option value="Farinha de mandioca"></option><option value="Feijão carioca"></option><option value="Feijão preto"></option>
-      <option value="Fermento químico"></option><option value="Filtro de café"></option><option value="Frango inteiro"></option><option value="Peito de frango"></option>
-      <option value="Geleia"></option><option value="Gelatina"></option><option value="Gengibre"></option><option value="Goiabada"></option>
-      <option value="Granola"></option><option value="Guardanapo"></option><option value="Hambúrguer"></option><option value="Iogurte natural"></option>
-      <option value="Iogurte sabor"></option><option value="Isotônico"></option><option value="Ketchup"></option><option value="Laranja"></option>
-      <option value="Leite"></option><option value="Leite integral"></option><option value="Leite desnatado"></option><option value="Leite em pó"></option>
-      <option value="Leite condensado"></option><option value="Lenço umedecido"></option><option value="Limão"></option><option value="Limpador multiuso"></option>
-      <option value="Linguiça"></option><option value="Macarrão espaguete"></option><option value="Macarrão penne"></option><option value="Macarrão instantâneo"></option>
-      <option value="Maçã"></option><option value="Maionese"></option><option value="Mamão"></option><option value="Manteiga"></option>
-      <option value="Margarina"></option><option value="Mel"></option><option value="Melancia"></option><option value="Milho verde"></option>
-      <option value="Molho de tomate"></option><option value="Mostarda"></option><option value="Mortadela"></option><option value="Mussarela"></option>
-      <option value="Óleo de soja"></option><option value="Azeite de oliva"></option><option value="Ovos"></option><option value="Pão francês"></option>
-      <option value="Pão de forma"></option><option value="Pão integral"></option><option value="Papel alumínio"></option><option value="Papel filme"></option>
-      <option value="Papel higiênico"></option><option value="Papel toalha"></option><option value="Parmesão"></option><option value="Pepino"></option>
-      <option value="Pimenta do reino"></option><option value="Pipoca"></option><option value="Presunto"></option><option value="Queijo prato"></option>
-      <option value="Queijo ralado"></option><option value="Refrigerante"></option><option value="Repolho"></option><option value="Sabão em pó"></option>
-      <option value="Sabão em barra"></option><option value="Sabonete"></option><option value="Saco de lixo"></option><option value="Sal"></option>
-      <option value="Salsicha"></option><option value="Sardinha enlatada"></option><option value="Seleta de legumes"></option><option value="Shampoo"></option>
-      <option value="Suco"></option><option value="Suco em pó"></option><option value="Tomate"></option><option value="Uva"></option>
-      <option value="Vinagre"></option><option value="Ração (pet)"></option>
-    </datalist>
+<div class="gridInput">
 
-    <input id="qty" placeholder="Qtd" inputmode="numeric">
-    <select id="category">
-      <option>Hortifruti</option>
-      <option>Padaria/Matinais</option>
-      <option>Carnes</option>
-      <option>Laticínios</option>
-      <option>Mercearia</option>
-      <option>Bebidas</option>
-      <option>Limpeza</option>
-      <option>Higiene</option>
-      <option>Outros</option>
-    </select>
-
-    <button class="addBtn" id="addBtn">Adicionar</button>
-  </div>
-
-  <div class="qtyRow">
-    <button type="button" class="qtyBtn" data-q="1">1</button>
-    <button type="button" class="qtyBtn" data-q="2">2</button>
-    <button type="button" class="qtyBtn" data-q="3">3</button>
-    <button type="button" class="qtyBtn" data-q="4">4</button>
-    <button type="button" class="qtyBtn" data-q="6">6</button>
-    <button type="button" class="qtyBtn" data-q="10">10</button>
-    <button type="button" class="qtyBtn" id="qtyMinus">-</button>
-    <button type="button" class="qtyBtn" id="qtyPlus">+</button>
-  </div>
-
-  <div class="actions">
-    <!-- (3) COMPARTILHAR -->
-    <button id="shareList">Compartilhar</button>
-
-    <button id="clearDone">Remover comprados</button>
-    <button id="sortAZ">Ordenar A–Z</button>
-    <button id="sortStore">Ordem de inclusão</button>
-    <button id="clearAll" class="danger">Limpar tudo</button>
-  </div>
+<div class="acWrap">
+<input id="product" placeholder="Produto (ex: maio → Maionese)" autocomplete="off">
+<div id="acList" class="acList"></div>
 </div>
 
-<!-- Modal compartilhar -->
-<div class="modal" id="modal">
-  <div class="modalCard">
-    <div class="modalTop">
-      <strong>Compartilhar lista</strong>
-      <button class="smallBtn" id="closeModal">Fechar</button>
-    </div>
+<input id="qty" placeholder="Qtd" inputmode="numeric">
 
-    <div class="modalGrid">
-      <textarea id="shareText" rows="10" readonly></textarea>
-      <div class="qrWrap">
-        <canvas id="qr"></canvas>
-        <div style="flex:1; min-width:200px;">
-          <button id="copyText" class="addBtn">Copiar texto</button>
-          <div class="hint" style="margin-top:8px;">
-            Dica: Você pode enviar o texto no WhatsApp. O QR também carrega a lista (texto) no celular.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<select id="category">
+<option>Hortifruti</option>
+<option>Padaria/Matinais</option>
+<option>Carnes</option>
+<option>Laticínios</option>
+<option>Mercearia</option>
+<option>Bebidas</option>
+<option>Limpeza</option>
+<option>Higiene</option>
+<option>Outros</option>
+</select>
+
+<button class="addBtn" id="addBtn">Adicionar</button>
 </div>
+</div>
+
+<script src="catalogo.js"></script>
 
 <script>
-/* =========================
-   DADOS / STORAGE
-========================= */
-const STORAGE="comprafacil_v7_items";
-const UIKEY="comprafacil_v7_ui";
-const FAVKEY="comprafacil_v7_favs";
-const RECKEY="comprafacil_v7_recents";
+// ===== CONFIG =====
+const STORAGE="comprafacil_v15";
+const CATS=["Hortifruti","Padaria/Matinais","Carnes","Laticínios","Mercearia","Bebidas","Limpeza","Higiene","Outros"];
+const CATALOG = window.CATALOG || {};
 
-const CATS=[
-  "Hortifruti","Padaria/Matinais","Carnes","Laticínios","Mercearia","Bebidas","Limpeza","Higiene","Outros"
-];
-
-function clsFor(cat){
-  return "c-" + cat
-    .replaceAll("í","i")
-    .replaceAll("ã","a")
-    .replaceAll("/","")
-    .replaceAll(" ","");
-}
-
-let items = JSON.parse(localStorage.getItem(STORAGE)) || [];
-let ui    = JSON.parse(localStorage.getItem(UIKEY))   || {collapsed:{}, allCollapsed:false};
-let favs  = JSON.parse(localStorage.getItem(FAVKEY))  || [];
-let recents = JSON.parse(localStorage.getItem(RECKEY))|| [];
-
-let filter="all";   // all | todo | done
-let order="store";  // store | az
-let catFilter="all";
+let items = JSON.parse(localStorage.getItem(STORAGE))||[];
+let filter="all";
 let textSearch="";
 
 const $=(id)=>document.getElementById(id);
+function save(){localStorage.setItem(STORAGE,JSON.stringify(items))}
 
-function save(){ localStorage.setItem(STORAGE, JSON.stringify(items)); }
-function saveUI(){ localStorage.setItem(UIKEY, JSON.stringify(ui)); }
-function saveFav(){ localStorage.setItem(FAVKEY, JSON.stringify(favs)); }
-function saveRec(){ localStorage.setItem(RECKEY, JSON.stringify(recents)); }
-
-function setActive(btnId){
-  document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
-  $(btnId).classList.add("active");
+function normalize(s){
+return (s||"").toLowerCase()
+.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
-function normName(s){ return (s||"").trim(); }
-function lower(s){ return (s||"").trim().toLowerCase(); }
-
-function pushRecent(name){
-  const n = normName(name);
-  if(!n) return;
-  recents = recents.filter(x => lower(x) !== lower(n));
-  recents.unshift(n);
-  recents = recents.slice(0, 30);
-  saveRec();
+// ===== AUTOCOMPLETE =====
+const FLAT=[];
+for(const cat in CATALOG){
+for(const name of CATALOG[cat]){
+FLAT.push({name,cat});
+}
 }
 
-function isFav(name){
-  return favs.some(x => lower(x) === lower(name));
+function showAC(list){
+const box=$("acList");
+box.innerHTML="";
+if(!list.length){box.style.display="none";return;}
+for(const it of list){
+const d=document.createElement("div");
+d.className="acItem";
+d.textContent=it.name+" — "+it.cat;
+d.onclick=()=>{
+$("product").value=it.name;
+$("category").value=it.cat;
+box.style.display="none";
+$("qty").focus();
+};
+box.appendChild(d);
 }
-function toggleFav(name){
-  const n = normName(name);
-  if(!n) return;
-  if(isFav(n)) favs = favs.filter(x => lower(x) !== lower(n));
-  else{
-    favs.unshift(n);
-    favs = favs.slice(0, 60);
-  }
-  saveFav();
-  renderChips();
-  render();
-}
-
-function setProductAndFocus(name){
-  $("product").value = name;
-  $("product").focus();
+box.style.display="block";
 }
 
-function renderChips(){
-  const favBox = $("favChips");
-  const recBox = $("recentChips");
-  favBox.innerHTML = "";
-  recBox.innerHTML = "";
-
-  if(favs.length===0){
-    const s=document.createElement("div");
-    s.style.color="rgba(255,255,255,.6)";
-    s.textContent="Sem favoritos ainda. Marque ☆/★ em um item.";
-    favBox.appendChild(s);
-  }else{
-    favs.forEach(n=>{
-      const b=document.createElement("button");
-      b.className="chip";
-      b.textContent=n;
-      b.onclick=()=>setProductAndFocus(n);
-      favBox.appendChild(b);
-    });
-  }
-
-  if(recents.length===0){
-    const s=document.createElement("div");
-    s.style.color="rgba(255,255,255,.6)";
-    s.textContent="Sem recentes ainda. Adicione alguns itens.";
-    recBox.appendChild(s);
-  }else{
-    recents.forEach(n=>{
-      const b=document.createElement("button");
-      b.className="chip";
-      b.textContent=n;
-      b.onclick=()=>setProductAndFocus(n);
-      recBox.appendChild(b);
-    });
-  }
+$("product").addEventListener("input",()=>{
+const q=normalize($("product").value);
+if(q.length<2){showAC([]);return;}
+const found=[];
+for(const it of FLAT){
+if(normalize(it.name).includes(q)){
+found.push(it);
+if(found.length>=12)break;
 }
-
-function getView(){
-  let view=[...items];
-
-  if(filter==="todo") view=view.filter(i=>!i.done);
-  if(filter==="done") view=view.filter(i=>i.done);
-  if(catFilter!=="all") view=view.filter(i=>i.category===catFilter);
-
-  // (1) Busca na lista atual
-  if(textSearch){
-    const t = lower(textSearch);
-    view = view.filter(i => lower(i.name).includes(t));
-  }
-
-  if(order==="az"){
-    view.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
-  }else{
-    view.sort((a,b)=>b.createdAt-a.createdAt);
-  }
-  return view;
 }
+showAC(found);
+});
 
-function groupByCategory(view){
-  const map=new Map(CATS.map(c=>[c,[]]));
-  for(const it of view){
-    if(!map.has(it.category)) map.set(it.category,[]);
-    map.get(it.category).push(it);
-  }
-  return map;
-}
+document.addEventListener("click",(e)=>{
+if(!e.target.closest(".acWrap"))$("acList").style.display="none";
+});
 
-function addItem(name, qty, category){
-  const n = normName(name);
-  const q = (qty||"1").trim() || "1";
-  const c = category || "Outros";
-  if(!n) return;
-
-  const found = items.find(i => !i.done && i.category===c && lower(i.name)===lower(n));
-  if(found){
-    const a=parseInt(found.qty,10);
-    const b=parseInt(q,10);
-    if(!isNaN(a) && !isNaN(b)) found.qty=String(a+b);
-    else found.qty=q;
-  }else{
-    items.unshift({name:n, qty:q, category:c, done:false, createdAt:Date.now()});
-  }
-
-  pushRecent(n);
-  save();
-  render();
-  renderChips();
-}
-
-function render(){
-  const sectionsEl=$("sections");
-  const emptyEl=$("empty");
-  const view=getView();
-  const grouped=groupByCategory(view);
-
-  sectionsEl.innerHTML="";
-  emptyEl.style.display = view.length ? "none" : "block";
-
-  for(const cat of CATS){
-    const arr=grouped.get(cat) || [];
-    if(arr.length===0) continue;
-
-    const section=document.createElement("div");
-    section.className="section " + clsFor(cat);
-
-    const header=document.createElement("div");
-    header.className="sectionHeader";
-
-    const title=document.createElement("div");
-    title.className="sectionTitle";
-    title.textContent = cat;
-
-    const badge=document.createElement("div");
-    const pending=arr.filter(x=>!x.done).length;
-    const done=arr.length-pending;
-    badge.className="badge";
-    badge.textContent = `${pending} pend • ${done} comp`;
-
-    const toggle=document.createElement("button");
-    const isCollapsed = !!ui.collapsed[cat];
-    toggle.textContent = isCollapsed ? "Expandir" : "Recolher";
-    toggle.onclick=()=>{
-      ui.collapsed[cat]=!ui.collapsed[cat];
-      saveUI();
-      render();
-    };
-
-    header.append(title,badge,toggle);
-
-    const itemsBox=document.createElement("div");
-    itemsBox.className="items";
-    if(isCollapsed) itemsBox.style.display="none";
-
-    for(const item of arr){
-      const row=document.createElement("div");
-      row.className="item" + (item.done?" done":"");
-
-      const check=document.createElement("input");
-      check.type="checkbox";
-      check.checked=item.done;
-      check.onchange=()=>{ item.done=check.checked; save(); render(); };
-
-      const name=document.createElement("div");
-      name.className="name";
-      name.textContent=item.name;
-
-      const tag=document.createElement("div");
-      tag.className="tag";
-      tag.textContent=item.qty;
-
-      const favBtn=document.createElement("button");
-      favBtn.className="favBtn" + (isFav(item.name) ? " favOn" : "");
-      favBtn.textContent = isFav(item.name) ? "★" : "☆";
-      favBtn.onclick=()=>toggleFav(item.name);
-
-      const qtyBtn=document.createElement("button");
-      qtyBtn.className="qtyBtn";
-      qtyBtn.textContent="Qtd";
-      qtyBtn.onclick=()=>{
-        const v=prompt("Quantidade:", item.qty||"1");
-        if(v===null) return;
-        item.qty=(v||"1").trim()||"1";
-        save(); render();
-      };
-
-      const delBtn=document.createElement("button");
-      delBtn.className="delBtn";
-      delBtn.textContent="Excluir";
-      delBtn.onclick=()=>{
-        items=items.filter(i=>i!==item);
-        save(); render();
-      };
-
-      row.append(check,name,tag,favBtn,qtyBtn,delBtn);
-      itemsBox.appendChild(row);
-    }
-
-    section.append(header,itemsBox);
-    sectionsEl.appendChild(section);
-  }
-}
-
-/* =========================
-   UI actions
-========================= */
+// ===== ADD ITEM =====
 $("addBtn").onclick=()=>{
-  const name=($("product").value||"").trim();
-  const qty=($("qty").value||"").trim() || "1";
-  const category=$("category").value;
-  if(!name) return;
-
-  addItem(name, qty, category);
-  $("product").value="";
-  $("qty").value="";
-  $("product").focus();
+const name=$("product").value.trim();
+const qty=$("qty").value.trim()||"1";
+const cat=$("category").value;
+if(!name)return;
+items.unshift({name,qty,cat,done:false});
+save();
+$("product").value="";
+$("qty").value="";
+render();
 };
 
-$("fAll").onclick=()=>{filter="all"; setActive("fAll"); render();};
-$("fTodo").onclick=()=>{filter="todo"; setActive("fTodo"); render();};
-$("fDone").onclick=()=>{filter="done"; setActive("fDone"); render();};
+// ===== RENDER =====
+function render(){
+const sec=$("sections");
+sec.innerHTML="";
+let view=[...items];
+if(filter==="todo")view=view.filter(i=>!i.done);
+if(filter==="done")view=view.filter(i=>i.done);
+if(textSearch)view=view.filter(i=>normalize(i.name).includes(normalize(textSearch)));
 
-$("filterCategory").onchange=(e)=>{catFilter=e.target.value; render();};
-
-$("clearDone").onclick=()=>{ items=items.filter(i=>!i.done); save(); render(); };
-
-$("clearAll").onclick=()=>{
-  if(confirm("Apagar tudo?")){
-    items=[]; save(); render();
-  }
-};
-
-$("sortAZ").onclick=()=>{order="az"; render();};
-$("sortStore").onclick=()=>{order="store"; render();};
-
-$("toggleAll").onclick=()=>{
-  ui.allCollapsed=!ui.allCollapsed;
-  for(const c of CATS) ui.collapsed[c]=ui.allCollapsed;
-  saveUI();
-  render();
-};
-
-$("clearFav").onclick=()=>{
-  if(confirm("Limpar favoritos?")){
-    favs=[]; saveFav(); renderChips(); render();
-  }
-};
-
-$("clearRecents").onclick=()=>{
-  if(confirm("Limpar recentes?")){
-    recents=[]; saveRec(); renderChips();
-  }
-};
-
-/* (1) busca */
-$("searchList").addEventListener("input",(e)=>{
-  textSearch = e.target.value || "";
-  render();
-});
-
-/* Atalhos de quantidade */
-document.querySelectorAll("[data-q]").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    $("qty").value = btn.getAttribute("data-q");
-    $("qty").focus();
-  });
-});
-$("qtyPlus").onclick=()=>{
-  const v=parseInt(($("qty").value||"0"),10);
-  $("qty").value = isNaN(v) ? "1" : String(v+1);
-  $("qty").focus();
-};
-$("qtyMinus").onclick=()=>{
-  const v=parseInt(($("qty").value||"0"),10);
-  if(isNaN(v) || v<=1) $("qty").value="1";
-  else $("qty").value=String(v-1);
-  $("qty").focus();
-};
-
-/* Sugestão: auto-categoria */
-const CATEGORY_HINTS = [
-  {cat:"Hortifruti", keys:["alface","tomate","cebola","alho","banana","maçã","maca","limão","limao","laranja","uva","couve","brócolis","brocolis","batata","cenoura","pepino"]},
-  {cat:"Laticínios", keys:["leite","iogurte","queijo","mussarela","parmesão","parmesao","manteiga","creme de leite","leite condensado"]},
-  {cat:"Carnes", keys:["frango","carne","bacon","linguiça","linguica","salsicha","atum","sardinha","peixe","hambúrguer","hamburguer","ovos"]},
-  {cat:"Limpeza", keys:["detergente","sabão","sabao","amaciante","desinfetante","água sanitária","agua sanitaria","multiuso","esponja","saco de lixo","papel toalha","papel alumínio","papel aluminio","papel filme"]},
-  {cat:"Higiene", keys:["papel higiênico","papel higienico","creme dental","escova","fio dental","enxaguante","sabonete","shampoo","condicionador","desodorante","absorvente","lenço","lenco","cotonete","algodão","algodao"]},
-  {cat:"Bebidas", keys:["água","agua","refrigerante","suco","isotônico","isotonico","energético","energetico"]},
-  {cat:"Mercearia", keys:["arroz","feijão","feijao","macarrão","macarrao","açúcar","acucar","sal","óleo","oleo","azeite","vinagre","farinha","fermento","molho","maionese","mostarda","ketchup","shoyu","pipoca","milho","ervilha","gelatina","chocolate","filtro de café","filtro de cafe"]},
-  {cat:"Padaria/Matinais", keys:["pão","pao","bolo","torrada","biscoito","cereal","granola","aveia","mel","geleia","café","cafe","chá","cha","achocolatado"]},
-];
-$("product").addEventListener("input", ()=>{
-  const v = lower($("product").value);
-  if(!v) return;
-  for(const rule of CATEGORY_HINTS){
-    if(rule.keys.some(k=>v.includes(k))){
-      $("category").value = rule.cat;
-      break;
-    }
-  }
-});
-
-/* Enter para adicionar */
-$("product").addEventListener("keydown",(e)=>{ if(e.key==="Enter"){ e.preventDefault(); $("addBtn").click(); }});
-$("qty").addEventListener("keydown",(e)=>{ if(e.key==="Enter"){ e.preventDefault(); $("addBtn").click(); }});
-
-/* =========================
-   (3) COMPARTILHAR TEXTO + QR (sem servidor)
-========================= */
-function buildShareText(){
-  const view = [...items].sort((a,b)=>a.category.localeCompare(b.category,"pt-BR"));
-  const map=new Map(CATS.map(c=>[c,[]]));
-  for(const it of view){
-    if(!map.has(it.category)) map.set(it.category,[]);
-    map.get(it.category).push(it);
-  }
-
-  let out = "CompraFácil — Lista de compras\n";
-  out += "--------------------------------\n";
-  for(const cat of CATS){
-    const arr = map.get(cat) || [];
-    if(!arr.length) continue;
-    out += `\n[${cat}]\n`;
-    for(const it of arr){
-      const box = it.done ? "[x]" : "[ ]";
-      out += `${box} ${it.name} (${it.qty})\n`;
-    }
-  }
-  out += "\n— Enviado pelo CompraFácil";
-  return out.trim();
+for(const cat of CATS){
+const arr=view.filter(i=>i.cat===cat);
+if(!arr.length)continue;
+const section=document.createElement("div");
+section.className="section";
+const head=document.createElement("div");
+head.className="sectionHeader";
+head.textContent=cat;
+section.appendChild(head);
+const box=document.createElement("div");
+box.className="items";
+for(const item of arr){
+const row=document.createElement("div");
+row.className="item"+(item.done?" done":"");
+const chk=document.createElement("input");
+chk.type="checkbox";
+chk.checked=item.done;
+chk.onchange=()=>{item.done=chk.checked;save();render();}
+const name=document.createElement("div");
+name.className="name";
+name.textContent=item.name+" ("+item.qty+")";
+const del=document.createElement("button");
+del.textContent="X";
+del.onclick=()=>{items=items.filter(i=>i!==item);save();render();}
+row.append(chk,name,del);
+box.appendChild(row);
+}
+section.appendChild(box);
+sec.appendChild(section);
+}
 }
 
-/* Web Share (quando existir) + fallback modal */
-$("shareList").onclick = async ()=>{
-  const text = buildShareText();
+// ===== FILTERS =====
+$("fAll").onclick=()=>{filter="all";render()}
+$("fTodo").onclick=()=>{filter="todo";render()}
+$("fDone").onclick=()=>{filter="done";render()}
+$("searchList").oninput=e=>{textSearch=e.target.value;render()}
 
-  // tenta share nativo
-  if(navigator.share){
-    try{
-      await navigator.share({ title:"CompraFácil", text });
-      return;
-    }catch(e){
-      // cai no modal
-    }
-  }
-
-  openShareModal(text);
-};
-
-function openShareModal(text){
-  $("shareText").value = text;
-  $("modal").style.display = "flex";
-  drawQR(text);
-}
-
-$("closeModal").onclick = ()=>{ $("modal").style.display="none"; };
-$("modal").addEventListener("click",(e)=>{
-  if(e.target.id==="modal") $("modal").style.display="none";
-});
-
-$("copyText").onclick = async ()=>{
-  const t = $("shareText").value;
-  try{
-    await navigator.clipboard.writeText(t);
-    alert("Texto copiado!");
-  }catch(e){
-    $("shareText").focus();
-    $("shareText").select();
-    alert("Selecione e copie manualmente.");
-  }
-};
-
-/* -------- QR CODE (puro JS) --------
-   QR simples (Modelo 2, correção M) suficiente para texto curto.
-   Para textos muito longos, use o texto no WhatsApp (recomendado).
-*/
-function drawQR(text){
-  // limita tamanho do texto no QR para evitar ficar ilegível
-  const data = text.length > 600 ? text.slice(0,600) + "\n...(cortado)" : text;
-
-  const qr = qrcode(4, 'M'); // versão 4 (33x33) para caber bem
-  qr.addData(data);
-  qr.make();
-
-  const canvas = $("qr");
-  const ctx = canvas.getContext("2d");
-
-  const count = qr.getModuleCount();
-  const scale = 6; // tamanho do pixel
-  const margin = 8;
-
-  canvas.width = count*scale + margin*2;
-  canvas.height = count*scale + margin*2;
-
-  // fundo branco
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  // desenha módulos
-  ctx.fillStyle = "#000";
-  for(let r=0;r<count;r++){
-    for(let c=0;c<count;c++){
-      if(qr.isDark(r,c)){
-        ctx.fillRect(margin + c*scale, margin + r*scale, scale, scale);
-      }
-    }
-  }
-}
-
-/* QR lib compacta (Kazuhiko Arase - estilo qrcode-generator) */
-function qrcode(typeNumber, errorCorrectionLevel){
-  const PAD0 = 0xEC;
-  const PAD1 = 0x11;
-
-  const _this = {};
-  let _typeNumber = typeNumber;
-  let _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
-  let _modules = null;
-  let _moduleCount = 0;
-  let _dataCache = null;
-  const _dataList = [];
-
-  _this.addData = function(data){
-    const newData = new QR8bitByte(data);
-    _dataList.push(newData);
-    _dataCache = null;
-  };
-
-  _this.isDark = function(row, col){
-    if(_modules[row][col] != null) return _modules[row][col];
-    return false;
-  };
-
-  _this.getModuleCount = function(){ return _moduleCount; };
-
-  _this.make = function(){
-    _modules = null;
-    makeImpl(false, getBestMaskPattern());
-  };
-
-  function makeImpl(test, maskPattern){
-    _moduleCount = _typeNumber * 4 + 17;
-    _modules = new Array(_moduleCount);
-    for(let row=0; row<_moduleCount; row++){
-      _modules[row] = new Array(_moduleCount);
-      for(let col=0; col<_moduleCount; col++) _modules[row][col] = null;
-    }
-    setupPositionProbePattern(0,0);
-    setupPositionProbePattern(_moduleCount-7,0);
-    setupPositionProbePattern(0,_moduleCount-7);
-    setupTimingPattern();
-    setupTypeInfo(test, maskPattern);
-    if(_typeNumber >= 2) setupPositionAdjustPattern();
-    if(_dataCache == null) _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
-    mapData(_dataCache, maskPattern);
-  }
-
-  function setupPositionProbePattern(row, col){
-    for(let r=-1; r<=7; r++){
-      if(row+r <= -1 || _moduleCount <= row+r) continue;
-      for(let c=-1; c<=7; c++){
-        if(col+c <= -1 || _moduleCount <= col+c) continue;
-        if((0<=r && r<=6 && (c==0 || c==6)) ||
-           (0<=c && c<=6 && (r==0 || r==6)) ||
-           (2<=r && r<=4 && 2<=c && c<=4)){
-          _modules[row+r][col+c] = true;
-        } else {
-          _modules[row+r][col+c] = false;
-        }
-      }
-    }
-  }
-
-  function setupTimingPattern(){
-    for(let i=8; i<_moduleCount-8; i++){
-      if(_modules[i][6] == null) _modules[i][6] = (i % 2 == 0);
-      if(_modules[6][i] == null) _modules[6][i] = (i % 2 == 0);
-    }
-  }
-
-  function setupPositionAdjustPattern(){
-    const pos = QRUtil.getPatternPosition(_typeNumber);
-    for(let i=0; i<pos.length; i++){
-      for(let j=0; j<pos.length; j++){
-        const row = pos[i];
-        const col = pos[j];
-        if(_modules[row][col] != null) continue;
-        for(let r=-2; r<=2; r++){
-          for(let c=-2; c<=2; c++){
-            if(r==-2 || r==2 || c==-2 || c==2 || (r==0 && c==0)){
-              _modules[row+r][col+c] = true;
-            } else {
-              _modules[row+r][col+c] = false;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  function setupTypeInfo(test, maskPattern){
-    const data = (_errorCorrectionLevel << 3) | maskPattern;
-    const bits = QRUtil.getBCHTypeInfo(data);
-    for(let i=0; i<15; i++){
-      const mod = (!test && ((bits >> i) & 1) == 1);
-      if(i < 6) _modules[i][8] = mod;
-      else if(i < 8) _modules[i+1][8] = mod;
-      else _modules[_moduleCount - 15 + i][8] = mod;
-    }
-    for(let i=0; i<15; i++){
-      const mod = (!test && ((bits >> i) & 1) == 1);
-      if(i < 8) _modules[8][_moduleCount - i - 1] = mod;
-      else if(i < 9) _modules[8][15 - i - 1 + 1] = mod;
-      else _modules[8][15 - i - 1] = mod;
-    }
-    _modules[_moduleCount - 8][8] = (!test);
-  }
-
-  function mapData(data, maskPattern){
-    let inc = -1;
-    let row = _moduleCount - 1;
-    let bitIndex = 7;
-    let byteIndex = 0;
-
-    for(let col=_moduleCount-1; col>0; col-=2){
-      if(col == 6) col--;
-      while(true){
-        for(let c=0; c<2; c++){
-          if(_modules[row][col - c] == null){
-            let dark = false;
-            if(byteIndex < data.length){
-              dark = (((data[byteIndex] >>> bitIndex) & 1) == 1);
-            }
-            const mask = QRUtil.getMask(maskPattern, row, col - c);
-            if(mask) dark = !dark;
-            _modules[row][col - c] = dark;
-            bitIndex--;
-            if(bitIndex == -1){
-              byteIndex++;
-              bitIndex = 7;
-            }
-          }
-        }
-        row += inc;
-        if(row < 0 || _moduleCount <= row){
-          row -= inc;
-          inc = -inc;
-          break;
-        }
-      }
-    }
-  }
-
-  function getBestMaskPattern(){
-    let minLostPoint = 0;
-    let pattern = 0;
-    for(let i=0; i<8; i++){
-      makeImpl(true, i);
-      const lostPoint = QRUtil.getLostPoint(_this);
-      if(i == 0 || minLostPoint > lostPoint){
-        minLostPoint = lostPoint;
-        pattern = i;
-      }
-    }
-    return pattern;
-  }
-
-  function createData(typeNumber, errorCorrectionLevel, dataList){
-    const rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
-    const buffer = new QRBitBuffer();
-    for(let i=0; i<dataList.length; i++){
-      const data = dataList[i];
-      buffer.put(data.getMode(), 4);
-      buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber));
-      data.write(buffer);
-    }
-    let totalDataCount = 0;
-    for(let i=0; i<rsBlocks.length; i++) totalDataCount += rsBlocks[i].dataCount;
-
-    if(buffer.getLengthInBits() > totalDataCount * 8) throw new Error("Texto grande demais para este QR.");
-
-    if(buffer.getLengthInBits() + 4 <= totalDataCount * 8) buffer.put(0, 4);
-    while(buffer.getLengthInBits() % 8 != 0) buffer.putBit(false);
-
-    while(true){
-      if(buffer.getLengthInBits() >= totalDataCount * 8) break;
-      buffer.put(PAD0, 8);
-      if(buffer.getLengthInBits() >= totalDataCount * 8) break;
-      buffer.put(PAD1, 8);
-    }
-
-    return createBytes(buffer, rsBlocks);
-  }
-
-  function createBytes(buffer, rsBlocks){
-    let offset = 0;
-    let maxDcCount = 0;
-    let maxEcCount = 0;
-
-    const dcdata = new Array(rsBlocks.length);
-    const ecdata = new Array(rsBlocks.length);
-
-    for(let r=0; r<rsBlocks.length; r++){
-      const dcCount = rsBlocks[r].dataCount;
-      const ecCount = rsBlocks[r].totalCount - dcCount;
-      maxDcCount = Math.max(maxDcCount, dcCount);
-      maxEcCount = Math.max(maxEcCount, ecCount);
-
-      dcdata[r] = new Array(dcCount);
-      for(let i=0; i<dcdata[r].length; i++) dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
-      offset += dcCount;
-
-      const rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
-      const rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
-      const modPoly = rawPoly.mod(rsPoly);
-
-      ecdata[r] = new Array(rsPoly.getLength() - 1);
-      for(let i=0; i<ecdata[r].length; i++){
-        const modIndex = i + modPoly.getLength() - ecdata[r].length;
-        ecdata[r][i] = (modIndex >= 0) ? modPoly.getAt(modIndex) : 0;
-      }
-    }
-
-    let totalCodeCount = 0;
-    for(let i=0; i<rsBlocks.length; i++) totalCodeCount += rsBlocks[i].totalCount;
-
-    const data = new Array(totalCodeCount);
-    let index = 0;
-
-    for(let i=0; i<maxDcCount; i++){
-      for(let r=0; r<rsBlocks.length; r++){
-        if(i < dcdata[r].length) data[index++] = dcdata[r][i];
-      }
-    }
-    for(let i=0; i<maxEcCount; i++){
-      for(let r=0; r<rsBlocks.length; r++){
-        if(i < ecdata[r].length) data[index++] = ecdata[r][i];
-      }
-    }
-    return data;
-  }
-
-  return _this;
-}
-
-/* ===== QR internals ===== */
-const QRMode = { MODE_8BIT_BYTE: 1<<2 };
-const QRErrorCorrectionLevel = { L:1, M:0, Q:3, H:2 };
-
-function QR8bitByte(data){
-  const _this = {};
-  _this.getMode = ()=>QRMode.MODE_8BIT_BYTE;
-  _this.getLength = ()=>data.length;
-  _this.write = (buffer)=>{
-    for(let i=0;i<data.length;i++) buffer.put(data.charCodeAt(i), 8);
-  };
-  return _this;
-}
-
-function QRBitBuffer(){
-  const _this = {};
-  const _buffer = [];
-  let _length = 0;
-
-  _this.getBuffer = ()=>_buffer;
-  _this.getLengthInBits = ()=>_length;
-  _this.put = (num, length)=>{
-    for(let i=0; i<length; i++){
-      _this.putBit(((num >>> (length - i - 1)) & 1) == 1);
-    }
-  };
-  _this.putBit = (bit)=>{
-    const bufIndex = Math.floor(_length / 8);
-    if(_buffer.length <= bufIndex) _buffer.push(0);
-    if(bit) _buffer[bufIndex] |= (0x80 >>> (_length % 8));
-    _length++;
-  };
-  return _this;
-}
-
-function QRPolynomial(num, shift){
-  const _this = {};
-  let offset=0;
-  while(offset < num.length && num[offset] == 0) offset++;
-  const _num = new Array(num.length - offset + (shift||0));
-  for(let i=0; i<num.length - offset; i++) _num[i] = num[i + offset];
-  for(let i=num.length - offset; i<_num.length; i++) _num[i] = 0;
-
-  _this.getAt = (i)=>_num[i];
-  _this.getLength = ()=>_num.length;
-
-  _this.multiply = (e)=>{
-    const num = new Array(_this.getLength() + e.getLength() - 1).fill(0);
-    for(let i=0; i<_this.getLength(); i++){
-      for(let j=0; j<e.getLength(); j++){
-        num[i+j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i)) + QRMath.glog(e.getAt(j)));
-      }
-    }
-    return QRPolynomial(num, 0);
-  };
-
-  _this.mod = (e)=>{
-    if(_this.getLength() - e.getLength() < 0) return _this;
-    const ratio = QRMath.glog(_this.getAt(0)) - QRMath.glog(e.getAt(0));
-    const num = new Array(_this.getLength());
-    for(let i=0;i<_this.getLength();i++) num[i]=_this.getAt(i);
-    for(let i=0;i<e.getLength();i++){
-      num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i)) + ratio);
-    }
-    return QRPolynomial(num,0).mod(e);
-  };
-
-  return _this;
-}
-
-const QRMath = (function(){
-  const EXP_TABLE = new Array(256);
-  const LOG_TABLE = new Array(256);
-  for(let i=0;i<8;i++) EXP_TABLE[i] = 1 << i;
-  for(let i=8;i<256;i++) EXP_TABLE[i] = EXP_TABLE[i-4] ^ EXP_TABLE[i-5] ^ EXP_TABLE[i-6] ^ EXP_TABLE[i-8];
-  for(let i=0;i<255;i++) LOG_TABLE[EXP_TABLE[i]] = i;
-  return {
-    glog: (n)=>{ if(n<1) throw new Error("glog"); return LOG_TABLE[n]; },
-    gexp: (n)=>{ while(n<0) n+=255; while(n>=256) n-=255; return EXP_TABLE[n]; }
-  };
-})();
-
-const QRUtil = {
-  PATTERN_POSITION_TABLE: [
-    [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34], [6, 22, 38]
-  ],
-  getPatternPosition: function(typeNumber){
-    return QRUtil.PATTERN_POSITION_TABLE[typeNumber-1] || [6, 26];
-  },
-  getBCHTypeInfo: function(data){
-    let d = data << 10;
-    while(QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(0b10100110111) >= 0){
-      d ^= (0b10100110111 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(0b10100110111)));
-    }
-    return ((data << 10) | d) ^ 0b101010000010010;
-  },
-  getBCHDigit: function(data){
-    let digit=0;
-    while(data!=0){ digit++; data >>>= 1; }
-    return digit;
-  },
-  getMask: function(maskPattern, i, j){
-    switch(maskPattern){
-      case 0: return (i + j) % 2 == 0;
-      case 1: return i % 2 == 0;
-      case 2: return j % 3 == 0;
-      case 3: return (i + j) % 3 == 0;
-      case 4: return (Math.floor(i/2) + Math.floor(j/3)) % 2 == 0;
-      case 5: return (i*j) % 2 + (i*j) % 3 == 0;
-      case 6: return ((i*j) % 2 + (i*j) % 3) % 2 == 0;
-      case 7: return ((i*j) % 3 + (i + j) % 2) % 2 == 0;
-      default: return false;
-    }
-  },
-  getErrorCorrectPolynomial: function(errorCorrectLength){
-    let a = QRPolynomial([1],0);
-    for(let i=0;i<errorCorrectLength;i++){
-      a = a.multiply(QRPolynomial([1, QRMath.gexp(i)],0));
-    }
-    return a;
-  },
-  getLengthInBits: function(mode, type){
-    // suficiente para 8bit byte em versões pequenas
-    return (type < 10) ? 8 : 16;
-  },
-  getLostPoint: function(qr){
-    // versão simples (boa o suficiente)
-    let lost = 0;
-    const count = qr.getModuleCount();
-    for(let r=0;r<count;r++){
-      for(let c=0;c<count;c++){
-        const dark = qr.isDark(r,c);
-        let sameCount=0;
-        for(let rr=Math.max(0,r-1); rr<=Math.min(count-1,r+1); rr++){
-          for(let cc=Math.max(0,c-1); cc<=Math.min(count-1,c+1); cc++){
-            if(rr==r && cc==c) continue;
-            if(qr.isDark(rr,cc) == dark) sameCount++;
-          }
-        }
-        if(sameCount > 5) lost += (sameCount - 5);
-      }
-    }
-    return lost;
-  }
-};
-
-const QRRSBlock = {
-  // blocos fixos para versão 4, nível M (suficiente para nosso uso)
-  getRSBlocks: function(typeNumber, errorCorrectionLevel){
-    // versão 4, M => total 2 blocos: (totalCount=50, dataCount=32) x1 + (totalCount=50, dataCount=32) x1
-    // simplificado: 1 bloco também funciona para nosso uso visual
-    return [{totalCount: 50, dataCount: 32}];
-  }
-};
-
-/* init */
-renderChips();
+// INIT
 render();
 </script>
 </body>
