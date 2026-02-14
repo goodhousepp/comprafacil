@@ -32,7 +32,7 @@ body{
   max-width:720px;
   margin:auto;
   padding:16px;
-  padding-bottom:260px;
+  padding-bottom:300px;
 }
 
 h1{
@@ -94,6 +94,42 @@ button{
   margin:6px 0 10px;
 }
 
+/* Itens rápidos */
+.quick{
+  margin:12px 0 6px;
+  padding:12px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.10);
+  border-radius:16px;
+}
+.quickTitle{
+  font-weight:800;
+  margin-bottom:10px;
+}
+.quickGrid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:10px;
+}
+.quickChip{
+  width:auto;
+  padding:10px 12px;
+  border-radius:999px;
+  font-size:14px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  cursor:pointer;
+  white-space:nowrap;
+}
+.quickChip:active{ transform:scale(.98); }
+#addBasic{
+  background:rgba(37,99,235,.22);
+  border-color:rgba(37,99,235,.35);
+  font-weight:800;
+}
+
+/* Seções por categoria */
 .section{
   border:1px solid var(--line);
   background:rgba(0,0,0,.10);
@@ -110,6 +146,7 @@ button{
   padding:12px 12px;
   background:rgba(255,255,255,.04);
   border-bottom:1px solid var(--line);
+  border-left:6px solid var(--c, #94a3b8);
 }
 
 .sectionTitle{
@@ -162,11 +199,14 @@ button{
   border-radius:10px;
   border:1px solid var(--line);
   white-space:nowrap;
+  background: color-mix(in srgb, var(--c, #94a3b8) 20%, transparent);
+  border-color: color-mix(in srgb, var(--c, #94a3b8) 35%, transparent);
 }
 
 .qtyBtn{background:rgba(37,99,235,.18);border-color:rgba(37,99,235,.30)}
 .delBtn{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.30)}
 
+/* Barra inferior responsiva */
 .bottomBar{
   position:fixed;
   bottom:0; left:0; right:0;
@@ -212,14 +252,6 @@ button{
 .c-Limpeza{ --c:#34d399; }
 .c-Higiene{ --c:#fb7185; }
 .c-Outros{ --c:#cbd5e1; }
-
-.sectionHeader{
-  border-left:6px solid var(--c, #94a3b8);
-}
-.tag{
-  background: color-mix(in srgb, var(--c, #94a3b8) 20%, transparent);
-  border-color: color-mix(in srgb, var(--c, #94a3b8) 35%, transparent);
-}
 </style>
 </head>
 
@@ -251,6 +283,12 @@ button{
   </div>
 
   <div class="hint">Toque na quantidade para editar. Itens iguais pendentes somam a quantidade.</div>
+
+  <div class="quick">
+    <div class="quickTitle">⚡ Itens rápidos</div>
+    <div class="quickGrid" id="quickGrid"></div>
+    <button id="addBasic">Adicionar lista básica</button>
+  </div>
 
   <div id="sections"></div>
   <div class="empty" id="empty" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
@@ -310,6 +348,34 @@ const ICON={
   "Outros":"📦"
 };
 
+// Itens mais usuais (edite como quiser)
+const QUICK_ITEMS = [
+  { name:"Leite", qty:"1", category:"Laticínios" },
+  { name:"Pão", qty:"1", category:"Padaria/Matinais" },
+  { name:"Ovos", qty:"10", category:"Mercearia" },
+  { name:"Arroz", qty:"1", category:"Mercearia" },
+  { name:"Feijão", qty:"1", category:"Mercearia" },
+  { name:"Café", qty:"1", category:"Padaria/Matinais" },
+  { name:"Açúcar", qty:"1", category:"Mercearia" },
+  { name:"Óleo", qty:"1", category:"Mercearia" },
+  { name:"Macarrão", qty:"1", category:"Mercearia" },
+  { name:"Sal", qty:"1", category:"Mercearia" },
+  { name:"Água", qty:"1", category:"Bebidas" },
+  { name:"Refrigerante", qty:"1", category:"Bebidas" },
+  { name:"Frango", qty:"1", category:"Carnes" },
+  { name:"Carne", qty:"1", category:"Carnes" },
+  { name:"Banana", qty:"1", category:"Hortifruti" },
+  { name:"Tomate", qty:"1", category:"Hortifruti" },
+  { name:"Cebola", qty:"1", category:"Hortifruti" },
+  { name:"Alho", qty:"1", category:"Hortifruti" },
+  { name:"Detergente", qty:"1", category:"Limpeza" },
+  { name:"Sabão em pó", qty:"1", category:"Limpeza" },
+  { name:"Amaciante", qty:"1", category:"Limpeza" },
+  { name:"Papel higiênico", qty:"1", category:"Higiene" },
+  { name:"Shampoo", qty:"1", category:"Higiene" },
+  { name:"Sabonete", qty:"1", category:"Higiene" }
+];
+
 function clsFor(cat){
   return "c-" + cat
     .replaceAll("í","i")
@@ -327,16 +393,37 @@ let catFilter="all";
 
 const $ = (id)=>document.getElementById(id);
 
-function save(){
-  localStorage.setItem(STORAGE,JSON.stringify(items));
-}
-function saveUI(){
-  localStorage.setItem(UIKEY,JSON.stringify(ui));
-}
+function save(){ localStorage.setItem(STORAGE,JSON.stringify(items)); }
+function saveUI(){ localStorage.setItem(UIKEY,JSON.stringify(ui)); }
 
 function setActive(btnId){
   document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
   $(btnId).classList.add("active");
+}
+
+function addPreset(p){
+  const name = (p.name||"").trim();
+  const qty  = (p.qty||"1").trim() || "1";
+  const category = p.category || "Outros";
+  if(!name) return;
+
+  const found = items.find(i =>
+    !i.done &&
+    i.category===category &&
+    i.name.toLowerCase()===name.toLowerCase()
+  );
+
+  if(found){
+    const a=parseInt(found.qty,10);
+    const b=parseInt(qty,10);
+    if(!isNaN(a) && !isNaN(b)) found.qty=String(a+b);
+    else found.qty=qty;
+  }else{
+    items.unshift({name,qty,category,done:false,createdAt:Date.now()});
+  }
+
+  save();
+  render();
 }
 
 function getView(){
@@ -371,6 +458,19 @@ function render(){
 
   sectionsEl.innerHTML="";
   emptyEl.style.display = view.length ? "none" : "block";
+
+  // Itens rápidos
+  const quickGrid = $("quickGrid");
+  if(quickGrid){
+    quickGrid.innerHTML="";
+    QUICK_ITEMS.forEach(p=>{
+      const btn=document.createElement("button");
+      btn.className="quickChip";
+      btn.textContent = `${ICON[p.category]||"🛒"} ${p.name}`;
+      btn.onclick=()=>addPreset(p);
+      quickGrid.appendChild(btn);
+    });
+  }
 
   for(const cat of CATS){
     const arr=grouped.get(cat) || [];
@@ -467,6 +567,7 @@ $("addBtn").onclick=()=>{
     i.category===category &&
     i.name.toLowerCase()===name.toLowerCase()
   );
+
   if(found){
     const a=parseInt(found.qty,10);
     const b=parseInt(qty,10);
@@ -509,6 +610,11 @@ $("toggleAll").onclick=()=>{
   for(const c of CATS) ui.collapsed[c]=ui.allCollapsed;
   saveUI();
   render();
+};
+
+// Adicionar lista básica de uma vez
+$("addBasic").onclick=()=>{
+  QUICK_ITEMS.forEach(addPreset);
 };
 
 render();
