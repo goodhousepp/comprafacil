@@ -34,8 +34,3 @@ Open link → Menu ⋮ → **Install app** / **Add to Home screen**
 Abrir no Safari → Compartilhar → **Adicionar à Tela de Início**
 
 Open in Safari → Share → **Add to Home Screen**
-
----
-
-Minimalista. Rápido. Funcional.  
-Minimal. Fast. Functional.
