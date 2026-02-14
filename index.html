@@ -1,239 +1,485 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>CompraFácil</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CompraFácil</title>
 
-<meta name="theme-color" content="#0d1b2a" />
-<link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d1b2a" />
+  <link rel="manifest" href="manifest.json">
 
-<style>
-:root{
-  --bg:#0d1b2a;
-  --bg2:#16283f;
-  --card:#13253a;
-  --text:#ffffff;
-  --muted:#cbd5e1;
-  --primary:#2563eb;
-  --danger:#ef4444;
-  --ok:#22c55e;
-  --radius:16px;
-  --safeB: env(safe-area-inset-bottom, 0px);
-}
+  <style>
+    :root{
+      --bg1:#0d1b2a;
+      --bg2:#16283f;
+      --card:#13253a;
+      --card2:#1b3350;
+      --text:#ffffff;
+      --muted:#cbd5e1;
+      --line:#2a4363;
+      --primary:#2563eb;
+      --primary2:#1d4ed8;
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --radius:16px;
+      --safeB: env(safe-area-inset-bottom, 0px);
+    }
 
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:linear-gradient(180deg,var(--bg),var(--bg2));
-  color:var(--text);
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+    }
 
-.wrap{max-width:760px;margin:auto;padding:16px 14px 150px}
+    .wrap{max-width:760px;margin:0 auto}
 
-h1{margin:0 0 10px;font-size:22px}
+    header{
+      position:sticky; top:0; z-index:10;
+      padding:16px 14px 10px;
+      background:linear-gradient(to bottom, rgba(13,27,42,.92), rgba(13,27,42,.65));
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
 
-select, input, button{
-  border-radius:12px;
-  padding:10px;
-  border:none;
-  font-size:14px;
-}
+    h1{margin:0 0 10px;font-size:22px;font-weight:800;letter-spacing:.2px}
 
-select{background:#1f3552;color:white}
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .chip{
+      padding:10px 14px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:15px;
+      cursor:pointer;
+      touch-action:manipulation;
+      white-space:nowrap;
+    }
+    .chip.on{background:var(--primary);border-color:rgba(255,255,255,.14)}
+    .stats{margin-left:auto;font-size:14px;color:var(--muted)}
 
-input{flex:1}
+    .hint{margin-top:10px;font-size:13px;color:var(--muted)}
 
-button{cursor:pointer}
+    .content{
+      padding:12px 14px;
+      padding-bottom:calc(190px + var(--safeB));
+    }
 
-.addBtn{
-  background:var(--primary);
-  color:white;
-}
+    .topRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
 
-.list{margin-top:15px;display:flex;flex-direction:column;gap:10px}
+    select, input, button{
+      font-size:16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:12px 12px;
+      outline:none;
+    }
+    select{cursor:pointer}
+    input::placeholder{color:rgba(203,213,225,.75)}
 
-.item{
-  background:#1b3350;
-  padding:12px;
-  border-radius:var(--radius);
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:12px;
+    }
 
-.name{flex:1}
+    .item{
+      background:linear-gradient(180deg, rgba(27,51,80,.80), rgba(19,37,58,.85));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      padding:12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .check{width:24px;height:24px;accent-color:var(--ok);transform:scale(1.1)}
+    .name{flex:1;min-width:0;font-size:18px;line-height:1.15;word-break:break-word}
+    .done .name{text-decoration:line-through;opacity:.6}
 
-.done .name{
-  text-decoration:line-through;
-  opacity:.6;
-}
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(37,99,235,.18);
+      white-space:nowrap;
+    }
 
-.categoryTag{
-  font-size:12px;
-  padding:4px 8px;
-  border-radius:8px;
-  background:#2563eb;
-}
+    .pill{
+      border:none;
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+      cursor:pointer;
+      touch-action:manipulation;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      white-space:nowrap;
+    }
+    .qtyBtn{background:rgba(37,99,235,.18);border-color:rgba(37,99,235,.35);min-width:72px;text-align:center}
+    .delBtn{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.35)}
 
-.qtyBtn{
-  background:#243f60;
-  color:white;
-}
+    .bottomBar{
+      position:fixed; left:0; right:0; bottom:0; z-index:20;
+      padding:12px 14px calc(12px + var(--safeB));
+      background:rgba(19,37,58,.92);
+      backdrop-filter:blur(12px);
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .barWrap{max-width:760px;margin:0 auto}
 
-.delBtn{
-  background:var(--danger);
-  color:white;
-}
+    .gridInput{
+      display:grid;
+      grid-template-columns: 1fr 90px 1fr;
+      gap:10px;
+      align-items:center;
+    }
+    .gridInput .addBtn{
+      grid-column: 1 / -1;
+      background:linear-gradient(180deg,var(--primary),var(--primary2));
+      border:1px solid rgba(255,255,255,.14);
+      font-weight:800;
+    }
 
-.bottomBar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#13253a;
-  padding:12px 14px calc(12px + var(--safeB));
-}
+    @media (min-width: 520px){
+      .gridInput{
+        grid-template-columns: 1fr 90px 190px 170px;
+      }
+      .gridInput .addBtn{
+        grid-column:auto;
+      }
+    }
 
-.row{
-  display:flex;
-  gap:8px;
-  margin-bottom:8px;
-}
-</style>
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .small{
+      font-size:14px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+      touch-action:manipulation;
+      white-space:nowrap;
+    }
+    .danger{background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.30)}
+
+    .empty{margin-top:10px;color:var(--muted);font-size:14px;opacity:.9}
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <header>
+      <h1>🛒 CompraFácil</h1>
+      <div class="toolbar">
+        <button class="chip on" id="filterAll">Todos</button>
+        <button class="chip" id="filterTodo">Pendentes</button>
+        <button class="chip" id="filterDone">Comprados</button>
+        <div class="stats" id="stats">0 pendentes • 0 comprados</div>
+      </div>
 
-<div class="wrap">
+      <div class="topRow">
+        <select id="filterCategory">
+          <option value="all">Todas categorias</option>
+          <option value="Hortifruti">Hortifruti</option>
+          <option value="Padaria/Matinais">Padaria/Matinais</option>
+          <option value="Carnes">Carnes</option>
+          <option value="Laticínios">Laticínios</option>
+          <option value="Mercearia">Mercearia</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Limpeza">Limpeza</option>
+          <option value="Higiene">Higiene</option>
+          <option value="Outros">Outros</option>
+        </select>
+      </div>
 
-<h1>🛒 CompraFácil</h1>
+      <div class="hint">Toque na quantidade para editar. Itens iguais pendentes somam a quantidade.</div>
+    </header>
 
-<div class="row">
-<select id="filterCategory">
-<option value="all">Todas categorias</option>
-<option>Hortifruti</option>
-<option>Carnes</option>
-<option>Laticínios</option>
-<option>Bebidas</option>
-<option>Limpeza</option>
-<option>Outros</option>
-</select>
-</div>
+    <div class="content">
+      <div class="list" id="list"></div>
+      <div class="empty" id="empty" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
+    </div>
+  </div>
 
-<div class="list" id="list"></div>
+  <div class="bottomBar">
+    <div class="barWrap">
+      <div class="gridInput">
+        <input id="product" placeholder="Produto (ex: leite)" autocomplete="off" />
+        <input id="qty" placeholder="Qtd" inputmode="numeric" />
+        <select id="category">
+          <option value="Hortifruti">Hortifruti</option>
+          <option value="Padaria/Matinais">Padaria/Matinais</option>
+          <option value="Carnes">Carnes</option>
+          <option value="Laticínios">Laticínios</option>
+          <option value="Mercearia">Mercearia</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Limpeza">Limpeza</option>
+          <option value="Higiene">Higiene</option>
+          <option value="Outros">Outros</option>
+        </select>
+        <button class="addBtn" id="addBtn">Adicionar</button>
+      </div>
 
-</div>
-
-<div class="bottomBar">
-
-<div class="row">
-<input id="product" placeholder="Produto">
-<input id="qty" style="max-width:70px" placeholder="Qtd">
-<select id="category">
-<option>Hortifruti</option>
-<option>Carnes</option>
-<option>Laticínios</option>
-<option>Bebidas</option>
-<option>Limpeza</option>
-<option>Outros</option>
-</select>
-<button class="addBtn" id="addBtn">Adicionar</button>
-</div>
-
-</div>
+      <div class="actions">
+        <button class="small" id="clearDone">Remover comprados</button>
+        <button class="small" id="sortAZ">Ordenar A–Z</button>
+        <button class="small" id="sortStore">Ordem de inclusão</button>
+        <button class="small danger" id="clearAll">Limpar tudo</button>
+      </div>
+    </div>
+  </div>
 
 <script>
-const STORAGE_KEY="comprafacil_cat_v1";
+(() => {
+  const $ = (id) => document.getElementById(id);
 
-let items=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];
+  const productEl = $("product");
+  const qtyEl = $("qty");
+  const categoryEl = $("category");
+  const addBtn = $("addBtn");
 
-function save(){
-localStorage.setItem(STORAGE_KEY,JSON.stringify(items));
-}
+  const listEl = $("list");
+  const emptyEl = $("empty");
+  const statsEl = $("stats");
 
-function render(){
-const list=document.getElementById("list");
-const filter=document.getElementById("filterCategory").value;
-list.innerHTML="";
+  const filterAll = $("filterAll");
+  const filterTodo = $("filterTodo");
+  const filterDone = $("filterDone");
+  const filterCategory = $("filterCategory");
 
-let view=[...items];
+  const clearDone = $("clearDone");
+  const clearAll = $("clearAll");
+  const sortAZ = $("sortAZ");
+  const sortStore = $("sortStore");
 
-if(filter!=="all"){
-view=view.filter(i=>i.category===filter);
-}
+  const STORAGE_KEY = "comprafacil_cat_items_v3";
+  const ORDER_KEY   = "comprafacil_cat_order_v3";
+  const FILTER_KEY  = "comprafacil_cat_filter_v3";
+  const CAT_FILTER_KEY = "comprafacil_cat_filter_category_v3";
 
-view.forEach(item=>{
-const row=document.createElement("div");
-row.className="item"+(item.done?" done":"");
+  let items = load();
+  let orderMode = localStorage.getItem(ORDER_KEY) || "store";
+  let filter = localStorage.getItem(FILTER_KEY) || "all";
+  let catFilter = localStorage.getItem(CAT_FILTER_KEY) || "all";
 
-const check=document.createElement("input");
-check.type="checkbox";
-check.checked=item.done;
-check.onchange=()=>{
-item.done=check.checked;
-save();
-render();
-};
+  function uid(){
+    return Math.random().toString(16).slice(2) + Date.now().toString(16);
+  }
 
-const name=document.createElement("div");
-name.className="name";
-name.textContent=item.name;
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
 
-const tag=document.createElement("div");
-tag.className="categoryTag";
-tag.textContent=item.category;
+  function save(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
 
-const qty=document.createElement("button");
-qty.className="qtyBtn";
-qty.textContent=item.qty;
-qty.onclick=()=>{
-const val=prompt("Quantidade:",item.qty);
-if(val!==null){
-item.qty=val||"1";
-save();
-render();
-}
-};
+  function normalizeName(name){
+    return name.trim().replace(/\s+/g, " ");
+  }
 
-const del=document.createElement("button");
-del.className="delBtn";
-del.textContent="X";
-del.onclick=()=>{
-items=items.filter(i=>i!==item);
-save();
-render();
-};
+  function setFilter(next){
+    filter = next;
+    localStorage.setItem(FILTER_KEY, filter);
+    [filterAll, filterTodo, filterDone].forEach(b => b.classList.remove("on"));
+    if(next === "all") filterAll.classList.add("on");
+    if(next === "todo") filterTodo.classList.add("on");
+    if(next === "done") filterDone.classList.add("on");
+    render();
+  }
 
-row.append(check,name,tag,qty,del);
-list.appendChild(row);
-});
-}
+  function setOrder(mode){
+    orderMode = mode;
+    localStorage.setItem(ORDER_KEY, orderMode);
+    render();
+  }
 
-document.getElementById("addBtn").onclick=()=>{
-const name=document.getElementById("product").value.trim();
-const qty=document.getElementById("qty").value.trim()||"1";
-const category=document.getElementById("category").value;
+  function setCategoryFilter(value){
+    catFilter = value;
+    localStorage.setItem(CAT_FILTER_KEY, catFilter);
+    render();
+  }
 
-if(!name)return;
+  function addItem(){
+    const name = normalizeName(productEl.value);
+    const qty  = (qtyEl.value || "").trim();
+    const category = categoryEl.value;
 
-items.unshift({name,qty,category,done:false});
-save();
-render();
-document.getElementById("product").value="";
-document.getElementById("qty").value="";
-};
+    if(!name) return;
 
-document.getElementById("filterCategory").onchange=render;
+    // soma se igual pendente e mesma categoria
+    const found = items.find(i =>
+      i.name.toLowerCase() === name.toLowerCase() &&
+      i.category === category &&
+      !i.done
+    );
 
-render();
+    if(found){
+      const a = parseInt(found.qty, 10);
+      const b = parseInt(qty || "1", 10);
+      if(!isNaN(a) && !isNaN(b)) found.qty = String(a + b);
+      else found.qty = qty || "1";
+      save();
+      productEl.value = "";
+      qtyEl.value = "";
+      productEl.focus();
+      render();
+      return;
+    }
+
+    items.unshift({
+      id: uid(),
+      name,
+      qty: qty || "1",
+      category,
+      done:false,
+      createdAt: Date.now()
+    });
+
+    save();
+    productEl.value = "";
+    qtyEl.value = "";
+    productEl.focus();
+    render();
+  }
+
+  function getView(){
+    let view = [...items];
+
+    if(orderMode === "az"){
+      view.sort((a,b) => a.name.localeCompare(b.name, "pt-BR", { sensitivity:"base" }));
+    }else{
+      view.sort((a,b) => b.createdAt - a.createdAt);
+    }
+
+    if(filter === "todo") view = view.filter(i => !i.done);
+    if(filter === "done") view = view.filter(i => i.done);
+
+    if(catFilter !== "all") view = view.filter(i => i.category === catFilter);
+
+    return view;
+  }
+
+  function render(){
+    const doneCount = items.filter(i => i.done).length;
+    const todoCount = items.length - doneCount;
+    statsEl.textContent = `${todoCount} pendentes • ${doneCount} comprados`;
+
+    const view = getView();
+    listEl.innerHTML = "";
+    emptyEl.style.display = view.length ? "none" : "block";
+
+    for(const item of view){
+      const row = document.createElement("div");
+      row.className = "item" + (item.done ? " done" : "");
+
+      const check = document.createElement("input");
+      check.type = "checkbox";
+      check.className = "check";
+      check.checked = !!item.done;
+      check.addEventListener("change", () => {
+        item.done = check.checked;
+        save();
+        render();
+      });
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = item.name;
+
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = item.category;
+
+      const qtyBtn = document.createElement("button");
+      qtyBtn.className = "pill qtyBtn";
+      qtyBtn.textContent = item.qty || "1";
+      qtyBtn.addEventListener("click", () => {
+        const next = prompt(`Quantidade para "${item.name}"`, item.qty || "1");
+        if(next === null) return;
+        item.qty = (next || "").trim() || "1";
+        save();
+        render();
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "pill delBtn";
+      delBtn.textContent = "Excluir";
+      delBtn.addEventListener("click", () => {
+        items = items.filter(i => i.id !== item.id);
+        save();
+        render();
+      });
+
+      row.append(check, name, tag, qtyBtn, delBtn);
+      listEl.appendChild(row);
+    }
+  }
+
+  // eventos
+  addBtn.addEventListener("click", addItem);
+  productEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
+  qtyEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
+
+  filterAll.addEventListener("click", () => setFilter("all"));
+  filterTodo.addEventListener("click", () => setFilter("todo"));
+  filterDone.addEventListener("click", () => setFilter("done"));
+
+  filterCategory.addEventListener("change", () => setCategoryFilter(filterCategory.value));
+
+  clearDone.addEventListener("click", () => {
+    items = items.filter(i => !i.done);
+    save();
+    render();
+  });
+
+  clearAll.addEventListener("click", () => {
+    if(confirm("Apagar toda a lista?")){
+      items = [];
+      save();
+      render();
+    }
+  });
+
+  sortAZ.addEventListener("click", () => setOrder("az"));
+  sortStore.addEventListener("click", () => setOrder("store"));
+
+  // inicial
+  filterCategory.value = catFilter;
+  setFilter(filter);
+  render();
+  productEl.focus();
+})();
 </script>
 
 <script>
-if("serviceWorker"in navigator){
-navigator.serviceWorker.register("./sw.js");
-}
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
 </script>
-
 </body>
 </html>
