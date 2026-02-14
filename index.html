@@ -3,105 +3,275 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Lista de Compras</title>
+  <title>CompraFácil</title>
 
-  <meta name="theme-color" content="#0f0f10" />
+  <meta name="theme-color" content="#0d1b2a" />
   <link rel="manifest" href="manifest.json">
 
   <style>
     :root{
-      --bg:#0f0f10; --card:#161618; --text:#f3f3f5; --muted:#a7a7ad; --line:#252529;
-      --ok:#2ecc71; --danger:#ff5c5c; --radius:16px;
+      --bg1:#0d1b2a;
+      --bg2:#16283f;
+      --card:#13253a;
+      --card2:#1b3350;
+      --text:#ffffff;
+      --muted:#cbd5e1;
+      --line:#2a4363;
+      --primary:#2563eb;
+      --primary2:#1d4ed8;
+      --danger:#ef4444;
+      --danger2:#dc2626;
+      --ok:#22c55e;
+      --radius:16px;
       --safeB: env(safe-area-inset-bottom, 0px);
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:720px;margin:0 auto}
-    header{
-      position:sticky;top:0;z-index:10;
-      padding:14px 14px 10px 14px;
-      background:linear-gradient(to bottom, rgba(15,15,16,.97), rgba(15,15,16,.82));
-      backdrop-filter:blur(10px);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    h1{font-size:20px;margin:0 0 10px 0}
-    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
-    .chip{
-      font-size:16px;padding:10px 12px;border-radius:999px;
-      border:1px solid var(--line);background:transparent;color:var(--text);
-      cursor:pointer;touch-action:manipulation
-    }
-    .chip.on{border-color:rgba(74,163,255,.6);background:rgba(74,163,255,.12)}
-    .stats{margin-left:auto;color:var(--muted);font-size:14px}
-    .content{padding:12px 14px;padding-bottom:calc(150px + var(--safeB))}
-    .list{display:flex;flex-direction:column;gap:10px}
-    .item{
-      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-      padding:12px;display:flex;gap:10px;align-items:center
-    }
-    .check{width:28px;height:28px;accent-color:var(--ok);transform:scale(1.2)}
-    .mid{flex:1;min-width:0}
-    .name{font-size:20px;line-height:1.15;word-break:break-word}
-    .sub{color:var(--muted);font-size:13px;margin-top:4px}
-    .right{display:flex;gap:8px;align-items:center}
-    .pill{
-      min-width:86px;text-align:center;font-size:16px;padding:10px 10px;border-radius:999px;
-      border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);
-      cursor:pointer;touch-action:manipulation
-    }
-    .danger{border-color:rgba(255,92,92,.55);background:rgba(255,92,92,.10);color:#ffd1d1}
-    .done .name{color:rgba(243,243,245,.55);text-decoration:line-through}
-    .done .pill{opacity:.65}
-    .hint{color:var(--muted);font-size:13px;margin:8px 2px 0 2px}
 
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+    }
+
+    .wrap{ max-width: 760px; margin: 0 auto; }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 16px 14px 10px;
+      background: linear-gradient(to bottom, rgba(13,27,42,.92), rgba(13,27,42,.65));
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size:15px;
+      cursor:pointer;
+      touch-action:manipulation;
+    }
+    .chip.on{
+      background: var(--primary);
+      border-color: rgba(255,255,255,.14);
+    }
+
+    .stats{
+      margin-left:auto;
+      font-size:14px;
+      color: var(--muted);
+      opacity:.95;
+    }
+
+    .hint{
+      margin-top:10px;
+      font-size:13px;
+      color: var(--muted);
+      opacity:.9;
+    }
+
+    .content{
+      padding: 12px 14px;
+      padding-bottom: calc(160px + var(--safeB));
+    }
+
+    .empty{
+      margin-top:10px;
+      color: var(--muted);
+      opacity:.85;
+      font-size:14px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 10px;
+    }
+
+    .item{
+      background: linear-gradient(180deg, rgba(27,51,80,.80), rgba(19,37,58,.85));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .check{
+      width:24px;
+      height:24px;
+      accent-color: var(--ok);
+      transform: scale(1.1);
+    }
+
+    .name{
+      flex:1;
+      min-width:0;
+      font-size:18px;
+      line-height:1.15;
+      word-break: break-word;
+    }
+
+    .done .name{
+      text-decoration: line-through;
+      opacity:.6;
+    }
+
+    .pill{
+      border:none;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-size:14px;
+      color:var(--text);
+      cursor:pointer;
+      touch-action:manipulation;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .qtyBtn{
+      min-width:80px;
+      text-align:center;
+      background: rgba(37,99,235,.18);
+      border: 1px solid rgba(37,99,235,.35);
+    }
+
+    .delBtn{
+      background: rgba(239,68,68,.18);
+      border: 1px solid rgba(239,68,68,.35);
+    }
+
+    /* Barra fixa inferior */
     .bottomBar{
-      position:fixed;left:0;right:0;bottom:0;z-index:20;
-      background:rgba(15,15,16,.92);backdrop-filter:blur(12px);
-      border-top:1px solid rgba(255,255,255,.08);
-      padding:10px 12px calc(10px + var(--safeB)) 12px;
+      position: fixed;
+      left:0; right:0; bottom:0;
+      z-index: 20;
+      padding: 12px 14px calc(12px + var(--safeB));
+      background: rgba(19,37,58,.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,.10);
     }
-    .barWrap{max-width:720px;margin:0 auto}
-    .barRow{display:flex;gap:10px;align-items:center}
-    input,button{
-      font-size:18px;border-radius:14px;border:1px solid var(--line);
-      background:var(--card);color:var(--text);padding:12px 12px;outline:none
+
+    .barWrap{ max-width: 760px; margin: 0 auto; }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
-    input::placeholder{color:rgba(243,243,245,.45)}
-    .grow{flex:1;min-width:0}
-    .qty{width:110px;text-align:center}
-    .addBtn{background:#1a2a3a;border-color:rgba(74,163,255,.45);font-weight:600;white-space:nowrap;cursor:pointer}
-    .barActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .small{font-size:15px;padding:10px 12px;border-radius:12px;background:transparent}
-    @media (max-width:420px){.qty{width:92px}.name{font-size:19px}}
+
+    input, button{
+      font-size:16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding: 12px 12px;
+      outline: none;
+    }
+
+    input::placeholder{ color: rgba(203,213,225,.7); }
+
+    .grow{ flex:1; min-width:0; }
+
+    .qty{
+      width: 90px;
+      text-align:center;
+    }
+
+    .addBtn{
+      background: linear-gradient(180deg, var(--primary), var(--primary2));
+      border: 1px solid rgba(255,255,255,.14);
+      font-weight:700;
+      cursor:pointer;
+      white-space:nowrap;
+      touch-action:manipulation;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .small{
+      font-size:14px;
+      padding:10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+      touch-action:manipulation;
+    }
+
+    .danger{
+      background: rgba(239,68,68,.22);
+      border-color: rgba(239,68,68,.30);
+    }
+
+    @media (max-width: 420px){
+      .qty{ width: 82px; }
+      .name{ font-size: 17px; }
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header>
-      <h1>🛒 Lista de Compras</h1>
+      <h1>🛒 CompraFácil</h1>
+
       <div class="toolbar">
         <button class="chip on" id="filterAll">Todos</button>
         <button class="chip" id="filterTodo">Pendentes</button>
         <button class="chip" id="filterDone">Comprados</button>
-        <div class="stats" id="stats">0 itens</div>
+        <div class="stats" id="stats">0 pendentes • 0 comprados</div>
       </div>
+
       <div class="hint">Marque como comprado ✅. Toque na quantidade para editar.</div>
     </header>
 
     <div class="content">
       <div class="list" id="list"></div>
-      <div class="hint" id="emptyHint" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
+      <div class="empty" id="empty" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
     </div>
   </div>
 
   <div class="bottomBar">
     <div class="barWrap">
-      <div class="barRow">
+      <div class="row">
         <input id="product" class="grow" placeholder="Produto (ex: leite)" autocomplete="off" />
         <input id="qty" class="qty" placeholder="Qtd" inputmode="numeric" />
         <button id="addBtn" class="addBtn">Adicionar</button>
       </div>
-      <div class="barActions">
+
+      <div class="actions">
         <button class="small" id="clearDone">Remover comprados</button>
         <button class="small" id="sortAZ">Ordenar A–Z</button>
         <button class="small" id="sortStore">Ordem de inclusão</button>
@@ -118,8 +288,8 @@
   const qtyEl = $("qty");
   const addBtn = $("addBtn");
   const listEl = $("list");
+  const emptyEl = $("empty");
   const statsEl = $("stats");
-  const emptyHint = $("emptyHint");
 
   const filterAll = $("filterAll");
   const filterTodo = $("filterTodo");
@@ -130,48 +300,32 @@
   const sortAZ = $("sortAZ");
   const sortStore = $("sortStore");
 
-  const STORAGE_KEY = "shopping_list_githubpages_v1";
-  const ORDER_KEY = "shopping_list_order_githubpages_v1";
+  const STORAGE_KEY = "comprafacil_items_v1";
+  const ORDER_KEY   = "comprafacil_order_v1";
+  const FILTER_KEY  = "comprafacil_filter_v1";
 
   let items = load();
-  let filter = "all";
   let orderMode = localStorage.getItem(ORDER_KEY) || "store"; // store | az
+  let filter = localStorage.getItem(FILTER_KEY) || "all";     // all | todo | done
 
-  function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+  function uid(){
+    return Math.random().toString(16).slice(2) + Date.now().toString(16);
+  }
+
   function load(){
     try{
       const raw = localStorage.getItem(STORAGE_KEY);
       return raw ? JSON.parse(raw) : [];
     }catch(e){ return []; }
   }
-  function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
-  function normalizeName(name){ return name.trim().replace(/\s+/g, " "); }
 
-  function addItem(){
-    const name = normalizeName(productEl.value);
-    const qty = (qtyEl.value || "").trim();
-    if(!name) return;
-
-    const found = items.find(i => i.name.toLowerCase() === name.toLowerCase() && !i.done);
-    if(found){
-      if(qty){
-        const a = parseInt(found.qty, 10);
-        const b = parseInt(qty, 10);
-        if(!isNaN(a) && !isNaN(b)) found.qty = String(a + b);
-        else found.qty = qty;
-      }
-      save(); render();
-      productEl.value = ""; qtyEl.value = ""; productEl.focus();
-      return;
-    }
-
-    items.unshift({ id: uid(), name, qty: qty || "1", done:false, createdAt: Date.now() });
-    save(); render();
-    productEl.value = ""; qtyEl.value = ""; productEl.focus();
+  function save(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }
 
   function setFilter(next){
     filter = next;
+    localStorage.setItem(FILTER_KEY, filter);
     [filterAll, filterTodo, filterDone].forEach(b => b.classList.remove("on"));
     if(next === "all") filterAll.classList.add("on");
     if(next === "todo") filterTodo.classList.add("on");
@@ -185,15 +339,48 @@
     render();
   }
 
-  function getViewItems(){
+  function normalizeName(name){
+    return name.trim().replace(/\s+/g, " ");
+  }
+
+  function addItem(){
+    const name = normalizeName(productEl.value);
+    const qty  = (qtyEl.value || "").trim();
+    if(!name) return;
+
+    // se já existir pendente igual, soma
+    const found = items.find(i => i.name.toLowerCase() === name.toLowerCase() && !i.done);
+    if(found){
+      const a = parseInt(found.qty, 10);
+      const b = parseInt(qty || "1", 10);
+      if(!isNaN(a) && !isNaN(b)) found.qty = String(a + b);
+      else found.qty = qty || "1";
+      save();
+      productEl.value = ""; qtyEl.value = "";
+      productEl.focus();
+      render();
+      return;
+    }
+
+    items.unshift({ id: uid(), name, qty: qty || "1", done:false, createdAt: Date.now() });
+    save();
+    productEl.value = ""; qtyEl.value = "";
+    productEl.focus();
+    render();
+  }
+
+  function getView(){
     let view = [...items];
+
     if(orderMode === "az"){
       view.sort((a,b) => a.name.localeCompare(b.name, "pt-BR", { sensitivity:"base" }));
-    }else{
+    } else {
       view.sort((a,b) => b.createdAt - a.createdAt);
     }
+
     if(filter === "todo") view = view.filter(i => !i.done);
     if(filter === "done") view = view.filter(i => i.done);
+
     return view;
   }
 
@@ -203,9 +390,9 @@
     const todoCount = total - doneCount;
     statsEl.textContent = `${todoCount} pendentes • ${doneCount} comprados`;
 
-    const view = getViewItems();
+    const view = getView();
     listEl.innerHTML = "";
-    emptyHint.style.display = (view.length === 0) ? "block" : "none";
+    emptyEl.style.display = view.length ? "none" : "block";
 
     for(const item of view){
       const row = document.createElement("div");
@@ -215,50 +402,46 @@
       check.type = "checkbox";
       check.className = "check";
       check.checked = !!item.done;
-      check.addEventListener("change", () => { item.done = check.checked; save(); render(); });
-
-      const mid = document.createElement("div");
-      mid.className = "mid";
+      check.addEventListener("change", () => {
+        item.done = check.checked;
+        save();
+        render();
+      });
 
       const name = document.createElement("div");
       name.className = "name";
       name.textContent = item.name;
 
-      const sub = document.createElement("div");
-      sub.className = "sub";
-      sub.textContent = "Toque na quantidade para editar";
-
-      mid.appendChild(name); mid.appendChild(sub);
-
-      const right = document.createElement("div");
-      right.className = "right";
-
       const qtyBtn = document.createElement("button");
-      qtyBtn.className = "pill";
+      qtyBtn.className = "pill qtyBtn";
       qtyBtn.textContent = item.qty || "1";
       qtyBtn.addEventListener("click", () => {
         const next = prompt(`Quantidade para "${item.name}"`, item.qty || "1");
         if(next === null) return;
         item.qty = (next || "").trim() || "1";
-        save(); render();
+        save();
+        render();
       });
 
-      const del = document.createElement("button");
-      del.className = "pill danger";
-      del.textContent = "Excluir";
-      del.addEventListener("click", () => { items = items.filter(i => i.id !== item.id); save(); render(); });
-
-      right.appendChild(qtyBtn);
-      right.appendChild(del);
+      const delBtn = document.createElement("button");
+      delBtn.className = "pill delBtn";
+      delBtn.textContent = "Excluir";
+      delBtn.addEventListener("click", () => {
+        items = items.filter(i => i.id !== item.id);
+        save();
+        render();
+      });
 
       row.appendChild(check);
-      row.appendChild(mid);
-      row.appendChild(right);
+      row.appendChild(name);
+      row.appendChild(qtyBtn);
+      row.appendChild(delBtn);
 
       listEl.appendChild(row);
     }
   }
 
+  // eventos
   addBtn.addEventListener("click", addItem);
   productEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
   qtyEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
@@ -267,12 +450,25 @@
   filterTodo.addEventListener("click", () => setFilter("todo"));
   filterDone.addEventListener("click", () => setFilter("done"));
 
-  clearDone.addEventListener("click", () => { items = items.filter(i => !i.done); save(); render(); });
-  clearAll.addEventListener("click", () => { if(confirm("Apagar toda a lista?")){ items=[]; save(); render(); } });
+  clearDone.addEventListener("click", () => {
+    items = items.filter(i => !i.done);
+    save();
+    render();
+  });
+
+  clearAll.addEventListener("click", () => {
+    if(confirm("Apagar toda a lista?")){
+      items = [];
+      save();
+      render();
+    }
+  });
 
   sortAZ.addEventListener("click", () => setOrder("az"));
   sortStore.addEventListener("click", () => setOrder("store"));
 
+  // inicial
+  setFilter(filter);
   render();
   productEl.focus();
 })();
@@ -285,5 +481,6 @@
     });
   }
 </script>
+
 </body>
 </html>
