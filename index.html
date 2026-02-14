@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Lista de Compras</title>
+
+  <meta name="theme-color" content="#0f0f10" />
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    :root{
+      --bg:#0f0f10; --card:#161618; --text:#f3f3f5; --muted:#a7a7ad; --line:#252529;
+      --ok:#2ecc71; --danger:#ff5c5c; --radius:16px;
+      --safeB: env(safe-area-inset-bottom, 0px);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:720px;margin:0 auto}
+    header{
+      position:sticky;top:0;z-index:10;
+      padding:14px 14px 10px 14px;
+      background:linear-gradient(to bottom, rgba(15,15,16,.97), rgba(15,15,16,.82));
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    h1{font-size:20px;margin:0 0 10px 0}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+    .chip{
+      font-size:16px;padding:10px 12px;border-radius:999px;
+      border:1px solid var(--line);background:transparent;color:var(--text);
+      cursor:pointer;touch-action:manipulation
+    }
+    .chip.on{border-color:rgba(74,163,255,.6);background:rgba(74,163,255,.12)}
+    .stats{margin-left:auto;color:var(--muted);font-size:14px}
+    .content{padding:12px 14px;padding-bottom:calc(150px + var(--safeB))}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      padding:12px;display:flex;gap:10px;align-items:center
+    }
+    .check{width:28px;height:28px;accent-color:var(--ok);transform:scale(1.2)}
+    .mid{flex:1;min-width:0}
+    .name{font-size:20px;line-height:1.15;word-break:break-word}
+    .sub{color:var(--muted);font-size:13px;margin-top:4px}
+    .right{display:flex;gap:8px;align-items:center}
+    .pill{
+      min-width:86px;text-align:center;font-size:16px;padding:10px 10px;border-radius:999px;
+      border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);
+      cursor:pointer;touch-action:manipulation
+    }
+    .danger{border-color:rgba(255,92,92,.55);background:rgba(255,92,92,.10);color:#ffd1d1}
+    .done .name{color:rgba(243,243,245,.55);text-decoration:line-through}
+    .done .pill{opacity:.65}
+    .hint{color:var(--muted);font-size:13px;margin:8px 2px 0 2px}
+
+    .bottomBar{
+      position:fixed;left:0;right:0;bottom:0;z-index:20;
+      background:rgba(15,15,16,.92);backdrop-filter:blur(12px);
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:10px 12px calc(10px + var(--safeB)) 12px;
+    }
+    .barWrap{max-width:720px;margin:0 auto}
+    .barRow{display:flex;gap:10px;align-items:center}
+    input,button{
+      font-size:18px;border-radius:14px;border:1px solid var(--line);
+      background:var(--card);color:var(--text);padding:12px 12px;outline:none
+    }
+    input::placeholder{color:rgba(243,243,245,.45)}
+    .grow{flex:1;min-width:0}
+    .qty{width:110px;text-align:center}
+    .addBtn{background:#1a2a3a;border-color:rgba(74,163,255,.45);font-weight:600;white-space:nowrap;cursor:pointer}
+    .barActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .small{font-size:15px;padding:10px 12px;border-radius:12px;background:transparent}
+    @media (max-width:420px){.qty{width:92px}.name{font-size:19px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>🛒 Lista de Compras</h1>
+      <div class="toolbar">
+        <button class="chip on" id="filterAll">Todos</button>
+        <button class="chip" id="filterTodo">Pendentes</button>
+        <button class="chip" id="filterDone">Comprados</button>
+        <div class="stats" id="stats">0 itens</div>
+      </div>
+      <div class="hint">Marque como comprado ✅. Toque na quantidade para editar.</div>
+    </header>
+
+    <div class="content">
+      <div class="list" id="list"></div>
+      <div class="hint" id="emptyHint" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
+    </div>
+  </div>
+
+  <div class="bottomBar">
+    <div class="barWrap">
+      <div class="barRow">
+        <input id="product" class="grow" placeholder="Produto (ex: leite)" autocomplete="off" />
+        <input id="qty" class="qty" placeholder="Qtd" inputmode="numeric" />
+        <button id="addBtn" class="addBtn">Adicionar</button>
+      </div>
+      <div class="barActions">
+        <button class="small" id="clearDone">Remover comprados</button>
+        <button class="small" id="sortAZ">Ordenar A–Z</button>
+        <button class="small" id="sortStore">Ordem de inclusão</button>
+        <button class="small danger" id="clearAll">Limpar tudo</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const productEl = $("product");
+  const qtyEl = $("qty");
+  const addBtn = $("addBtn");
+  const listEl = $("list");
+  const statsEl = $("stats");
+  const emptyHint = $("emptyHint");
+
+  const filterAll = $("filterAll");
+  const filterTodo = $("filterTodo");
+  const filterDone = $("filterDone");
+
+  const clearDone = $("clearDone");
+  const clearAll = $("clearAll");
+  const sortAZ = $("sortAZ");
+  const sortStore = $("sortStore");
+
+  const STORAGE_KEY = "shopping_list_githubpages_v1";
+  const ORDER_KEY = "shopping_list_order_githubpages_v1";
+
+  let items = load();
+  let filter = "all";
+  let orderMode = localStorage.getItem(ORDER_KEY) || "store"; // store | az
+
+  function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
+  function normalizeName(name){ return name.trim().replace(/\s+/g, " "); }
+
+  function addItem(){
+    const name = normalizeName(productEl.value);
+    const qty = (qtyEl.value || "").trim();
+    if(!name) return;
+
+    const found = items.find(i => i.name.toLowerCase() === name.toLowerCase() && !i.done);
+    if(found){
+      if(qty){
+        const a = parseInt(found.qty, 10);
+        const b = parseInt(qty, 10);
+        if(!isNaN(a) && !isNaN(b)) found.qty = String(a + b);
+        else found.qty = qty;
+      }
+      save(); render();
+      productEl.value = ""; qtyEl.value = ""; productEl.focus();
+      return;
+    }
+
+    items.unshift({ id: uid(), name, qty: qty || "1", done:false, createdAt: Date.now() });
+    save(); render();
+    productEl.value = ""; qtyEl.value = ""; productEl.focus();
+  }
+
+  function setFilter(next){
+    filter = next;
+    [filterAll, filterTodo, filterDone].forEach(b => b.classList.remove("on"));
+    if(next === "all") filterAll.classList.add("on");
+    if(next === "todo") filterTodo.classList.add("on");
+    if(next === "done") filterDone.classList.add("on");
+    render();
+  }
+
+  function setOrder(mode){
+    orderMode = mode;
+    localStorage.setItem(ORDER_KEY, orderMode);
+    render();
+  }
+
+  function getViewItems(){
+    let view = [...items];
+    if(orderMode === "az"){
+      view.sort((a,b) => a.name.localeCompare(b.name, "pt-BR", { sensitivity:"base" }));
+    }else{
+      view.sort((a,b) => b.createdAt - a.createdAt);
+    }
+    if(filter === "todo") view = view.filter(i => !i.done);
+    if(filter === "done") view = view.filter(i => i.done);
+    return view;
+  }
+
+  function render(){
+    const total = items.length;
+    const doneCount = items.filter(i => i.done).length;
+    const todoCount = total - doneCount;
+    statsEl.textContent = `${todoCount} pendentes • ${doneCount} comprados`;
+
+    const view = getViewItems();
+    listEl.innerHTML = "";
+    emptyHint.style.display = (view.length === 0) ? "block" : "none";
+
+    for(const item of view){
+      const row = document.createElement("div");
+      row.className = "item" + (item.done ? " done" : "");
+
+      const check = document.createElement("input");
+      check.type = "checkbox";
+      check.className = "check";
+      check.checked = !!item.done;
+      check.addEventListener("change", () => { item.done = check.checked; save(); render(); });
+
+      const mid = document.createElement("div");
+      mid.className = "mid";
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = item.name;
+
+      const sub = document.createElement("div");
+      sub.className = "sub";
+      sub.textContent = "Toque na quantidade para editar";
+
+      mid.appendChild(name); mid.appendChild(sub);
+
+      const right = document.createElement("div");
+      right.className = "right";
+
+      const qtyBtn = document.createElement("button");
+      qtyBtn.className = "pill";
+      qtyBtn.textContent = item.qty || "1";
+      qtyBtn.addEventListener("click", () => {
+        const next = prompt(`Quantidade para "${item.name}"`, item.qty || "1");
+        if(next === null) return;
+        item.qty = (next || "").trim() || "1";
+        save(); render();
+      });
+
+      const del = document.createElement("button");
+      del.className = "pill danger";
+      del.textContent = "Excluir";
+      del.addEventListener("click", () => { items = items.filter(i => i.id !== item.id); save(); render(); });
+
+      right.appendChild(qtyBtn);
+      right.appendChild(del);
+
+      row.appendChild(check);
+      row.appendChild(mid);
+      row.appendChild(right);
+
+      listEl.appendChild(row);
+    }
+  }
+
+  addBtn.addEventListener("click", addItem);
+  productEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
+  qtyEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
+
+  filterAll.addEventListener("click", () => setFilter("all"));
+  filterTodo.addEventListener("click", () => setFilter("todo"));
+  filterDone.addEventListener("click", () => setFilter("done"));
+
+  clearDone.addEventListener("click", () => { items = items.filter(i => !i.done); save(); render(); });
+  clearAll.addEventListener("click", () => { if(confirm("Apagar toda a lista?")){ items=[]; save(); render(); } });
+
+  sortAZ.addEventListener("click", () => setOrder("az"));
+  sortStore.addEventListener("click", () => setOrder("store"));
+
+  render();
+  productEl.focus();
+})();
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
+</script>
+</body>
+</html>
