@@ -1,485 +1,238 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>CompraFácil</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>CompraFácil</title>
 
-  <meta name="theme-color" content="#0d1b2a" />
-  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0d1b2a" />
+<link rel="manifest" href="manifest.json">
 
-  <style>
-    :root{
-      --bg1:#0d1b2a;
-      --bg2:#16283f;
-      --card:#13253a;
-      --card2:#1b3350;
-      --text:#ffffff;
-      --muted:#cbd5e1;
-      --line:#2a4363;
-      --primary:#2563eb;
-      --primary2:#1d4ed8;
-      --danger:#ef4444;
-      --danger2:#dc2626;
-      --ok:#22c55e;
-      --radius:16px;
-      --safeB: env(safe-area-inset-bottom, 0px);
-    }
+<style>
+:root{
+  --bg:#0d1b2a;
+  --bg2:#16283f;
+  --card:#13253a;
+  --text:#ffffff;
+  --muted:#cbd5e1;
+  --primary:#2563eb;
+  --danger:#ef4444;
+  --ok:#22c55e;
+  --radius:16px;
+  --safeB: env(safe-area-inset-bottom, 0px);
+}
 
-    *{ box-sizing:border-box; }
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--text);
+}
 
-    body{
-      margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background: linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--text);
-    }
+.wrap{max-width:760px;margin:auto;padding:16px 14px 150px}
 
-    .wrap{ max-width: 760px; margin: 0 auto; }
+h1{margin:0 0 10px;font-size:22px}
 
-    header{
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding: 16px 14px 10px;
-      background: linear-gradient(to bottom, rgba(13,27,42,.92), rgba(13,27,42,.65));
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
+select, input, button{
+  border-radius:12px;
+  padding:10px;
+  border:none;
+  font-size:14px;
+}
 
-    h1{
-      margin:0 0 10px;
-      font-size:22px;
-      font-weight:700;
-      letter-spacing:.2px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+select{background:#1f3552;color:white}
 
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
+input{flex:1}
 
-    .chip{
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      font-size:15px;
-      cursor:pointer;
-      touch-action:manipulation;
-    }
-    .chip.on{
-      background: var(--primary);
-      border-color: rgba(255,255,255,.14);
-    }
+button{cursor:pointer}
 
-    .stats{
-      margin-left:auto;
-      font-size:14px;
-      color: var(--muted);
-      opacity:.95;
-    }
+.addBtn{
+  background:var(--primary);
+  color:white;
+}
 
-    .hint{
-      margin-top:10px;
-      font-size:13px;
-      color: var(--muted);
-      opacity:.9;
-    }
+.list{margin-top:15px;display:flex;flex-direction:column;gap:10px}
 
-    .content{
-      padding: 12px 14px;
-      padding-bottom: calc(160px + var(--safeB));
-    }
+.item{
+  background:#1b3350;
+  padding:12px;
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-    .empty{
-      margin-top:10px;
-      color: var(--muted);
-      opacity:.85;
-      font-size:14px;
-    }
+.name{flex:1}
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top: 10px;
-    }
+.done .name{
+  text-decoration:line-through;
+  opacity:.6;
+}
 
-    .item{
-      background: linear-gradient(180deg, rgba(27,51,80,.80), rgba(19,37,58,.85));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      padding: 12px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
+.categoryTag{
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:8px;
+  background:#2563eb;
+}
 
-    .check{
-      width:24px;
-      height:24px;
-      accent-color: var(--ok);
-      transform: scale(1.1);
-    }
+.qtyBtn{
+  background:#243f60;
+  color:white;
+}
 
-    .name{
-      flex:1;
-      min-width:0;
-      font-size:18px;
-      line-height:1.15;
-      word-break: break-word;
-    }
+.delBtn{
+  background:var(--danger);
+  color:white;
+}
 
-    .done .name{
-      text-decoration: line-through;
-      opacity:.6;
-    }
+.bottomBar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#13253a;
+  padding:12px 14px calc(12px + var(--safeB));
+}
 
-    .pill{
-      border:none;
-      border-radius: 12px;
-      padding: 9px 12px;
-      font-size:14px;
-      color:var(--text);
-      cursor:pointer;
-      touch-action:manipulation;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-    }
-
-    .qtyBtn{
-      min-width:80px;
-      text-align:center;
-      background: rgba(37,99,235,.18);
-      border: 1px solid rgba(37,99,235,.35);
-    }
-
-    .delBtn{
-      background: rgba(239,68,68,.18);
-      border: 1px solid rgba(239,68,68,.35);
-    }
-
-    /* Barra fixa inferior */
-    .bottomBar{
-      position: fixed;
-      left:0; right:0; bottom:0;
-      z-index: 20;
-      padding: 12px 14px calc(12px + var(--safeB));
-      background: rgba(19,37,58,.92);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(255,255,255,.10);
-    }
-
-    .barWrap{ max-width: 760px; margin: 0 auto; }
-
-    .row{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    input, button{
-      font-size:16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      padding: 12px 12px;
-      outline: none;
-    }
-
-    input::placeholder{ color: rgba(203,213,225,.7); }
-
-    .grow{ flex:1; min-width:0; }
-
-    .qty{
-      width: 90px;
-      text-align:center;
-    }
-
-    .addBtn{
-      background: linear-gradient(180deg, var(--primary), var(--primary2));
-      border: 1px solid rgba(255,255,255,.14);
-      font-weight:700;
-      cursor:pointer;
-      white-space:nowrap;
-      touch-action:manipulation;
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .small{
-      font-size:14px;
-      padding:10px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.10);
-      cursor:pointer;
-      touch-action:manipulation;
-    }
-
-    .danger{
-      background: rgba(239,68,68,.22);
-      border-color: rgba(239,68,68,.30);
-    }
-
-    @media (max-width: 420px){
-      .qty{ width: 82px; }
-      .name{ font-size: 17px; }
-    }
-  </style>
+.row{
+  display:flex;
+  gap:8px;
+  margin-bottom:8px;
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <h1>🛒 CompraFácil</h1>
 
-      <div class="toolbar">
-        <button class="chip on" id="filterAll">Todos</button>
-        <button class="chip" id="filterTodo">Pendentes</button>
-        <button class="chip" id="filterDone">Comprados</button>
-        <div class="stats" id="stats">0 pendentes • 0 comprados</div>
-      </div>
+<div class="wrap">
 
-      <div class="hint">Marque como comprado ✅. Toque na quantidade para editar.</div>
-    </header>
+<h1>🛒 CompraFácil</h1>
 
-    <div class="content">
-      <div class="list" id="list"></div>
-      <div class="empty" id="empty" style="display:none;">Lista vazia. Adicione itens abaixo.</div>
-    </div>
-  </div>
+<div class="row">
+<select id="filterCategory">
+<option value="all">Todas categorias</option>
+<option>Hortifruti</option>
+<option>Carnes</option>
+<option>Laticínios</option>
+<option>Bebidas</option>
+<option>Limpeza</option>
+<option>Outros</option>
+</select>
+</div>
 
-  <div class="bottomBar">
-    <div class="barWrap">
-      <div class="row">
-        <input id="product" class="grow" placeholder="Produto (ex: leite)" autocomplete="off" />
-        <input id="qty" class="qty" placeholder="Qtd" inputmode="numeric" />
-        <button id="addBtn" class="addBtn">Adicionar</button>
-      </div>
+<div class="list" id="list"></div>
 
-      <div class="actions">
-        <button class="small" id="clearDone">Remover comprados</button>
-        <button class="small" id="sortAZ">Ordenar A–Z</button>
-        <button class="small" id="sortStore">Ordem de inclusão</button>
-        <button class="small danger" id="clearAll">Limpar tudo</button>
-      </div>
-    </div>
-  </div>
+</div>
+
+<div class="bottomBar">
+
+<div class="row">
+<input id="product" placeholder="Produto">
+<input id="qty" style="max-width:70px" placeholder="Qtd">
+<select id="category">
+<option>Hortifruti</option>
+<option>Carnes</option>
+<option>Laticínios</option>
+<option>Bebidas</option>
+<option>Limpeza</option>
+<option>Outros</option>
+</select>
+<button class="addBtn" id="addBtn">Adicionar</button>
+</div>
+
+</div>
 
 <script>
-(() => {
-  const $ = (id) => document.getElementById(id);
+const STORAGE_KEY="comprafacil_cat_v1";
 
-  const productEl = $("product");
-  const qtyEl = $("qty");
-  const addBtn = $("addBtn");
-  const listEl = $("list");
-  const emptyEl = $("empty");
-  const statsEl = $("stats");
+let items=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];
 
-  const filterAll = $("filterAll");
-  const filterTodo = $("filterTodo");
-  const filterDone = $("filterDone");
+function save(){
+localStorage.setItem(STORAGE_KEY,JSON.stringify(items));
+}
 
-  const clearDone = $("clearDone");
-  const clearAll = $("clearAll");
-  const sortAZ = $("sortAZ");
-  const sortStore = $("sortStore");
+function render(){
+const list=document.getElementById("list");
+const filter=document.getElementById("filterCategory").value;
+list.innerHTML="";
 
-  const STORAGE_KEY = "comprafacil_items_v1";
-  const ORDER_KEY   = "comprafacil_order_v1";
-  const FILTER_KEY  = "comprafacil_filter_v1";
+let view=[...items];
 
-  let items = load();
-  let orderMode = localStorage.getItem(ORDER_KEY) || "store"; // store | az
-  let filter = localStorage.getItem(FILTER_KEY) || "all";     // all | todo | done
+if(filter!=="all"){
+view=view.filter(i=>i.category===filter);
+}
 
-  function uid(){
-    return Math.random().toString(16).slice(2) + Date.now().toString(16);
-  }
+view.forEach(item=>{
+const row=document.createElement("div");
+row.className="item"+(item.done?" done":"");
 
-  function load(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }catch(e){ return []; }
-  }
+const check=document.createElement("input");
+check.type="checkbox";
+check.checked=item.done;
+check.onchange=()=>{
+item.done=check.checked;
+save();
+render();
+};
 
-  function save(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }
+const name=document.createElement("div");
+name.className="name";
+name.textContent=item.name;
 
-  function setFilter(next){
-    filter = next;
-    localStorage.setItem(FILTER_KEY, filter);
-    [filterAll, filterTodo, filterDone].forEach(b => b.classList.remove("on"));
-    if(next === "all") filterAll.classList.add("on");
-    if(next === "todo") filterTodo.classList.add("on");
-    if(next === "done") filterDone.classList.add("on");
-    render();
-  }
+const tag=document.createElement("div");
+tag.className="categoryTag";
+tag.textContent=item.category;
 
-  function setOrder(mode){
-    orderMode = mode;
-    localStorage.setItem(ORDER_KEY, orderMode);
-    render();
-  }
+const qty=document.createElement("button");
+qty.className="qtyBtn";
+qty.textContent=item.qty;
+qty.onclick=()=>{
+const val=prompt("Quantidade:",item.qty);
+if(val!==null){
+item.qty=val||"1";
+save();
+render();
+}
+};
 
-  function normalizeName(name){
-    return name.trim().replace(/\s+/g, " ");
-  }
+const del=document.createElement("button");
+del.className="delBtn";
+del.textContent="X";
+del.onclick=()=>{
+items=items.filter(i=>i!==item);
+save();
+render();
+};
 
-  function addItem(){
-    const name = normalizeName(productEl.value);
-    const qty  = (qtyEl.value || "").trim();
-    if(!name) return;
+row.append(check,name,tag,qty,del);
+list.appendChild(row);
+});
+}
 
-    // se já existir pendente igual, soma
-    const found = items.find(i => i.name.toLowerCase() === name.toLowerCase() && !i.done);
-    if(found){
-      const a = parseInt(found.qty, 10);
-      const b = parseInt(qty || "1", 10);
-      if(!isNaN(a) && !isNaN(b)) found.qty = String(a + b);
-      else found.qty = qty || "1";
-      save();
-      productEl.value = ""; qtyEl.value = "";
-      productEl.focus();
-      render();
-      return;
-    }
+document.getElementById("addBtn").onclick=()=>{
+const name=document.getElementById("product").value.trim();
+const qty=document.getElementById("qty").value.trim()||"1";
+const category=document.getElementById("category").value;
 
-    items.unshift({ id: uid(), name, qty: qty || "1", done:false, createdAt: Date.now() });
-    save();
-    productEl.value = ""; qtyEl.value = "";
-    productEl.focus();
-    render();
-  }
+if(!name)return;
 
-  function getView(){
-    let view = [...items];
+items.unshift({name,qty,category,done:false});
+save();
+render();
+document.getElementById("product").value="";
+document.getElementById("qty").value="";
+};
 
-    if(orderMode === "az"){
-      view.sort((a,b) => a.name.localeCompare(b.name, "pt-BR", { sensitivity:"base" }));
-    } else {
-      view.sort((a,b) => b.createdAt - a.createdAt);
-    }
+document.getElementById("filterCategory").onchange=render;
 
-    if(filter === "todo") view = view.filter(i => !i.done);
-    if(filter === "done") view = view.filter(i => i.done);
-
-    return view;
-  }
-
-  function render(){
-    const total = items.length;
-    const doneCount = items.filter(i => i.done).length;
-    const todoCount = total - doneCount;
-    statsEl.textContent = `${todoCount} pendentes • ${doneCount} comprados`;
-
-    const view = getView();
-    listEl.innerHTML = "";
-    emptyEl.style.display = view.length ? "none" : "block";
-
-    for(const item of view){
-      const row = document.createElement("div");
-      row.className = "item" + (item.done ? " done" : "");
-
-      const check = document.createElement("input");
-      check.type = "checkbox";
-      check.className = "check";
-      check.checked = !!item.done;
-      check.addEventListener("change", () => {
-        item.done = check.checked;
-        save();
-        render();
-      });
-
-      const name = document.createElement("div");
-      name.className = "name";
-      name.textContent = item.name;
-
-      const qtyBtn = document.createElement("button");
-      qtyBtn.className = "pill qtyBtn";
-      qtyBtn.textContent = item.qty || "1";
-      qtyBtn.addEventListener("click", () => {
-        const next = prompt(`Quantidade para "${item.name}"`, item.qty || "1");
-        if(next === null) return;
-        item.qty = (next || "").trim() || "1";
-        save();
-        render();
-      });
-
-      const delBtn = document.createElement("button");
-      delBtn.className = "pill delBtn";
-      delBtn.textContent = "Excluir";
-      delBtn.addEventListener("click", () => {
-        items = items.filter(i => i.id !== item.id);
-        save();
-        render();
-      });
-
-      row.appendChild(check);
-      row.appendChild(name);
-      row.appendChild(qtyBtn);
-      row.appendChild(delBtn);
-
-      listEl.appendChild(row);
-    }
-  }
-
-  // eventos
-  addBtn.addEventListener("click", addItem);
-  productEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
-  qtyEl.addEventListener("keydown", (e) => { if(e.key === "Enter") addItem(); });
-
-  filterAll.addEventListener("click", () => setFilter("all"));
-  filterTodo.addEventListener("click", () => setFilter("todo"));
-  filterDone.addEventListener("click", () => setFilter("done"));
-
-  clearDone.addEventListener("click", () => {
-    items = items.filter(i => !i.done);
-    save();
-    render();
-  });
-
-  clearAll.addEventListener("click", () => {
-    if(confirm("Apagar toda a lista?")){
-      items = [];
-      save();
-      render();
-    }
-  });
-
-  sortAZ.addEventListener("click", () => setOrder("az"));
-  sortStore.addEventListener("click", () => setOrder("store"));
-
-  // inicial
-  setFilter(filter);
-  render();
-  productEl.focus();
-})();
+render();
 </script>
 
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js");
-    });
-  }
+if("serviceWorker"in navigator){
+navigator.serviceWorker.register("./sw.js");
+}
 </script>
 
 </body>
